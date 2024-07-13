@@ -176,10 +176,10 @@ namespace astra
     {
         float tileAnimationSpeed = 70;
         float listAnimationSpeed = 70;
-        float selectorYAnimationSpeed = 60;
-        float selectorXAnimationSpeed = 70;
-        float selectorWidthAnimationSpeed = 70;
-        float selectorHeightAnimationSpeed = 55;
+        float selectorYAnimationSpeed = 80;
+        float selectorXAnimationSpeed = 90;
+        float selectorWidthAnimationSpeed = 90;
+        float selectorHeightAnimationSpeed = 75;
         float windowAnimationSpeed = 25;
         float sideBarAnimationSpeed = 15;
         float fadeAnimationSpeed = 100;

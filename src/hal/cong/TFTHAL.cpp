@@ -170,11 +170,22 @@ void TFTHAL::_setBeepVol(uint8_t _vol) {
     // 设置蜂鸣器音量
 }
 
-// 按键读取
-bool TFTHAL::_getKey(key::KEY_INDEX _keyIndex) {
-    if (_keyIndex == key::KEY_0) return digitalRead(GPIO_NUM_10) == HIGH;
-    if (_keyIndex == key::KEY_1) return digitalRead(GPIO_NUM_11) == HIGH;
-    return false;
+// 按键读取 ← o →
+bool TFTHAL::_isLeft() {
+    return digitalRead(GPIO_NUM_10) == HIGH;
+}
+
+bool TFTHAL::_isConfirm() {
+    return digitalRead(GPIO_NUM_11) == HIGH;
+}
+
+bool TFTHAL::_isRight() {
+    return digitalRead(GPIO_NUM_12) == HIGH;
+}
+
+void TFTHAL::_startKeyScan() {
+    //扫描更新按键状态
+
 }
 
 // 更新配置

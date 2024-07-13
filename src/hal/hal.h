@@ -14,29 +14,6 @@ namespace oled {
 }
 
 namespace key {
-typedef enum keyFilter {
-  CHECKING = 0,
-  KEY_0_CONFIRM,
-  KEY_1_CONFIRM,
-  RELEASED,
-} KEY_FILTER;
-
-typedef enum keyAction {
-  INVALID = 0,
-  CLICK,
-  PRESS,
-} KEY_ACTION;
-
-typedef enum KeyType {
-  KEY_NOT_PRESSED = 0,
-  KEY_PRESSED,
-} KEY_TYPE;
-
-typedef enum keyIndex {
-  KEY_0 = 0,
-  KEY_1,
-  KEY_NUM,
-} KEY_INDEX;
 }
 
 namespace buzzer {
@@ -251,30 +228,25 @@ public:
    */
 
 public:
-  key::KEY_ACTION key[key::KEY_NUM] = {static_cast<key::keyAction>(0)};
-  key::KEY_TYPE keyFlag { static_cast<key::KEY_TYPE>(0) };
+  static bool isAnyKeyPressed() { return get()->_isAnyKeyPressed(); }
 
-public:
-  static bool getKey(key::KEY_INDEX _keyIndex) { return get()->_getKey(_keyIndex); }
+  virtual bool _isAnyKeyPressed() { return isLeft() || isRight() || isConfirm(); }
 
-  virtual bool _getKey(key::KEY_INDEX _keyIndex) { return false; }
+  static bool isLeft() { return get()->_isLeft(); }
 
-  static bool getAnyKey() { return get()->_getAnyKey(); }
+  virtual bool _isLeft() { return false; }
 
-  virtual bool _getAnyKey();
+  static bool isRight() { return get()->_isRight(); }
 
-  static key::KEY_ACTION *getKeyMap() { return get()->key; }
+  virtual bool _isRight() { return false; }
 
-  static key::KEY_TYPE *getKeyFlag() { return &get()->keyFlag; }
+  static bool isConfirm() { return get()->_isConfirm(); }
 
-public:
-  static void keyScan() { get()->_keyScan(); }
+  virtual bool _isConfirm() { return false; }
 
-  virtual void _keyScan();
+  static void startKeyScan() { get()->_startKeyScan(); }
 
-  static void keyTest() { return get()->_keyTest(); }
-
-  virtual void _keyTest();
+  virtual void _startKeyScan();
 
   /**
    * @brief system config.

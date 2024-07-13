@@ -13,6 +13,7 @@ public:
         tft_espi.init();
         pinMode(GPIO_NUM_10, INPUT_PULLDOWN);
         pinMode(GPIO_NUM_11, INPUT_PULLDOWN);
+        pinMode(GPIO_NUM_12, INPUT_PULLDOWN);
     }
 public:
     void _screenOn() override;
@@ -54,7 +55,10 @@ public:
     void _setBeepVol(uint8_t _vol) override;
 
 public:
-    bool _getKey(key::KEY_INDEX _keyIndex) override;
+    bool _isLeft() override;
+    bool _isRight() override;
+    bool _isConfirm() override;
+    void _startKeyScan() override;
 
 public:
     void _updateConfig() override;
