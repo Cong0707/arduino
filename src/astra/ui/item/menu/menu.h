@@ -42,7 +42,6 @@ public:
   [[nodiscard]] Position getItemPosition(unsigned char _index) const;
   virtual void childPosInit(const std::vector<float> &_camera) {}
   virtual void forePosInit() {}
-  bool hasBack = false;//防递归
 
 public:
   std::string title;
@@ -78,6 +77,7 @@ public:
 
 public:
   bool addItem(Menu *_page);
+  bool addParent(Menu *_page);
   bool addItem(Menu *_page, Widget* _anyWidget); //新建一个带有控件的列表项
 };
 
