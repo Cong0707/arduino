@@ -194,6 +194,8 @@ namespace astra
         bool backgroundBlur = true;
         bool lightMode = false;
 
+        bool useTraditionalSideBar = true; // 滑条样式 false是一端固定另一端长度可变 true参考普通sidebar样式
+
         float listBarWeight = 5;
         float listTextHeight = 8;
         float listTextMargin = 4; //文字边距

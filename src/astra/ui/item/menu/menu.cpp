@@ -226,10 +226,21 @@ namespace astra
                        0,
                        systemConfig.screenHeight);
 
-
-        /*
-        //draw bar.
-        HAL::drawBox(positionForeground.xBar, 0, astraConfig.listBarWeight, positionForeground.hBar);
+        if (getUIConfig().useTraditionalSideBar)
+        {
+            //传统进度条
+            float height = (float)systemConfig.screenHeight / getItemNum();
+            HAL::drawBox(
+                positionForeground.xBar,
+                positionForeground.hBar - height,
+                astraConfig.listBarWeight,
+                height
+            );
+        } else
+        {
+            //draw bar.
+            HAL::drawBox(positionForeground.xBar, 0, astraConfig.listBarWeight, positionForeground.hBar);
+        }
 
         //light mode.
         if (astraConfig.lightMode)
@@ -238,17 +249,6 @@ namespace astra
             HAL::drawBox(0, 0, systemConfig.screenWeight, systemConfig.screenHeight);
             HAL::setDrawType(1);
         }
-        */
-
-
-        //传统进度条
-        float height = (float)systemConfig.screenHeight / getItemNum();
-        HAL::drawBox(
-            positionForeground.xBar,
-            positionForeground.hBar - height,
-            astraConfig.listBarWeight,
-            height
-        );
 
         Animation::move(&positionForeground.hBar, positionForeground.hBarTrg, astraConfig.listAnimationSpeed);
         Animation::move(&positionForeground.xBar, positionForeground.xBarTrg, astraConfig.listAnimationSpeed);
@@ -382,16 +382,21 @@ namespace astra
         //draw bar.
         //在屏幕最上方 两个像素高
         positionForeground.wBarTrg = (selectIndex + 1) * ((float)systemConfig.screenWeight / getItemNum());
-        //HAL::drawBox(0, positionForeground.yBar, positionForeground.wBar, astraConfig.tileBarHeight);
 
-        //传统进度条
-        float width = (float)systemConfig.screenWeight / getItemNum();
-        HAL::drawBox(
-            positionForeground.wBar - width,
-            positionForeground.yBar,
-            width,
-            astraConfig.tileBarHeight
-        );
+        if (getUIConfig().useTraditionalSideBar)
+        {
+            //传统进度条
+            float width = (float)systemConfig.screenWeight / getItemNum();
+            HAL::drawBox(
+                positionForeground.wBar - width,
+                positionForeground.yBar,
+                width,
+                astraConfig.tileBarHeight
+            );
+        } else
+        {
+            HAL::drawBox(0, positionForeground.yBar, positionForeground.wBar, astraConfig.tileBarHeight);
+        }
 
         //draw left arrow.
         HAL::drawHLine(astraConfig.tileArrowMargin, positionForeground.yArrow, astraConfig.tileArrowWidth);
