@@ -49,7 +49,7 @@ namespace astra
 
             //这里条件可以加上一个如果按键按下 就滑出 DONE
             HAL::startKeyScan();
-            if (time - beginTime >= _time || HAL::isAnyKeyPressed()) yPopTrg = 0 - hPop - 8; //滑出
+            if (time - beginTime >= _time) yPopTrg = 0 - hPop - 8; //滑出
 
             if (yPop == 0 - hPop - 8)
             {
@@ -139,6 +139,8 @@ namespace astra
         return true;
     }
 
+    unsigned long lastMillis = 0;
+
     void Launcher::update()
     {
         HAL::canvasClear();
@@ -178,11 +180,12 @@ namespace astra
 
         //if (time >= 700) time = 0; //test
 
-        if (HAL::millis() % 20 == 0) {
+        if (HAL::millis() - lastMillis >= 100) {
             HAL::startKeyScan();
             if (HAL::isLeft()) selector->goPreview();
             else if (HAL::isRight()) selector->goNext();
             else if (HAL::isConfirm()) open();
+            lastMillis = HAL::millis();
         }
 
         HAL::canvasUpdate();

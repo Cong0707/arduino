@@ -53,12 +53,18 @@ namespace astra
 
     bool Menu::addItem(Menu* _page)
     {
-        if (_page == nullptr) return false;
-        if (!_page->childWidget.empty()) return false;
+        if (_page == nullptr) return false; //判null
+        if (!_page->childWidget.empty()) return false; //判widget必须为空
 
-        _page->parent = this;
-        this->childMenu.push_back(_page);
-        this->forePosInit();
+        if (_page->parent != nullptr && !_page->hasBack)
+        {
+            _page->addItem(parent);
+            _page->hasBack = true;
+        }
+
+        _page->parent = this; //使子页面的父页面为自己
+        this->childMenu.push_back(_page); //更新自己的子页面列表
+        this->forePosInit(); //更新自己的坐标
         return true;
     }
 

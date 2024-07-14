@@ -42,6 +42,7 @@ public:
   [[nodiscard]] Position getItemPosition(unsigned char _index) const;
   virtual void childPosInit(const std::vector<float> &_camera) {}
   virtual void forePosInit() {}
+  bool hasBack = false;//防递归
 
 public:
   std::string title;
