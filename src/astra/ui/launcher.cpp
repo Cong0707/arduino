@@ -86,7 +86,7 @@ namespace astra
             popInfo("unreferenced page!", 300);
             return false;
         }
-        if (currentMenu->getNextMenu()->getItemNum() == 0)
+        if (currentMenu->getNextMenu()->getItemNum() <= 1)
         {
             popInfo("empty page!", 300);
             return false;
@@ -119,7 +119,7 @@ namespace astra
             popInfo("unreferenced page!", 300);
             return false;
         }
-        if (currentMenu->getPreview()->getItemNum() == 0)
+        if (currentMenu->getPreview()->getItemNum() <= 1)
         {
             popInfo("empty page!", 300);
             return false;
@@ -138,8 +138,6 @@ namespace astra
 
         return true;
     }
-
-    unsigned long lastMillis = 0;
 
     void Launcher::update()
     {
@@ -180,13 +178,11 @@ namespace astra
 
         //if (time >= 700) time = 0; //test
 
-        if (HAL::millis() - lastMillis >= 100) {
-            HAL::startKeyScan();
-            if (HAL::isLeft()) selector->goPreview();
-            else if (HAL::isRight()) selector->goNext();
-            else if (HAL::isConfirm()) open();
-            lastMillis = HAL::millis();
-        }
+        HAL::startKeyScan();
+        if (HAL::isLeft()) selector->goPreview();
+        else if (HAL::isRight()) selector->goNext();
+        else if (HAL::isConfirm()) open();
+        else if (HAL::isCancel()) close();
 
         HAL::canvasUpdate();
 

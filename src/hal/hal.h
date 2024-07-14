@@ -244,6 +244,10 @@ public:
 
   virtual bool _isConfirm() { return false; }
 
+  static bool isCancel() { return get()->_isCancel(); }
+
+  virtual bool _isCancel() { return false; }
+
   static void startKeyScan() { get()->_startKeyScan(); }
 
   virtual void _startKeyScan();

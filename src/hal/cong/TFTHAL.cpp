@@ -170,22 +170,82 @@ void TFTHAL::_setBeepVol(uint8_t _vol) {
     // 设置蜂鸣器音量
 }
 
-// 按键读取 ← o →
-bool TFTHAL::_isLeft() {
-    return digitalRead(GPIO_NUM_10) == HIGH;
+
+
+unsigned long lastMillis = 0;
+
+bool lastState = false;//上次执行函数的状态
+unsigned long lastTime = 0;//上次改变状态的时间
+unsigned long lastDuration = 0;//上上次改变状态距离上次改变状态的时间
+
+bool isLefting = false;
+bool isRighting = false;
+bool isConfirmed = false;
+bool isCanceled = false;
+
+void TFTHAL::_startKeyScan() {
+    bool nowState = digitalRead(GPIO_NUM_11) == HIGH; //状态 是否按下
+    unsigned long duration = millis() - lastTime; //距离上次改变状态的时间
+    if (nowState != lastState)//如果改变状态
+    {
+        lastTime = millis(); //更新lastTime
+        if (lastDuration >= 300 && duration >= 1000 && !nowState) //现在是松开的状态 且按下持续500 按下之前松开持续300 长按
+        {
+            isCanceled = true;
+        }
+        else if (lastDuration >= 300 && duration <= 700 && !nowState) //现在是松开的状态 且按下小于500 按下之前松开持续300 短按
+        {
+            isConfirmed = true;
+        }
+        else if (lastDuration <= 300 && duration <= 700 && !nowState) //现在是松开的状态 且按下小于500 按下之前松开小于300 双击
+        {
+            //干嘛用呢不知道
+        }
+    }
+    lastState = nowState;
+    lastDuration = duration; //更新lastDuration
+
+    if (millis() - lastMillis >= 200) {
+        lastMillis = millis();
+        if (digitalRead(GPIO_NUM_10) == HIGH) isLefting = true;
+        else if (digitalRead(GPIO_NUM_12) == HIGH) isRighting = true;
+    }
 }
 
-bool TFTHAL::_isConfirm() {
-    return digitalRead(GPIO_NUM_11) == HIGH;
+bool TFTHAL::_isLeft() {
+    if (isLefting)
+    {
+        isLefting = false;
+        return true;
+    }
+    return false;
 }
 
 bool TFTHAL::_isRight() {
-    return digitalRead(GPIO_NUM_12) == HIGH;
+    if (isRighting)
+    {
+        isRighting = false;
+        return true;
+    }
+    return false;
 }
 
-void TFTHAL::_startKeyScan() {
-    //扫描更新按键状态
+bool TFTHAL::_isConfirm() {
+    if (isConfirmed)
+    {
+        isConfirmed = false;
+        return true;
+    }
+    return false;
+}
 
+bool TFTHAL::_isCancel() {
+    if (isCanceled)
+    {
+        isCanceled = false;
+        return true;
+    }
+    return false;
 }
 
 // 更新配置

@@ -58,6 +58,7 @@ public:
     bool _isLeft() override;
     bool _isRight() override;
     bool _isConfirm() override;
+    bool _isCancel() override;
     void _startKeyScan() override;
 
 public:
