@@ -77,8 +77,9 @@ public:
 
 public:
   bool addItem(Menu *_page);
-  bool addParent(Menu *_page);
   bool addItem(Menu *_page, Widget* _anyWidget); //新建一个带有控件的列表项
+private:
+  bool addParent(Menu *_page);
 };
 
 class List : public Menu {
