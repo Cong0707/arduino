@@ -376,7 +376,7 @@ namespace astra
         float width = (float)systemConfig.screenWeight / getItemNum();
         HAL::drawBox(
             0,
-            positionForeground.yBar - width,
+            positionForeground.yBar,
             positionForeground.wBar - width,
             astraConfig.tileBarHeight
         );
