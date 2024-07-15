@@ -179,10 +179,20 @@ namespace astra
         //if (time >= 700) time = 0; //test
 
         HAL::startKeyScan();
-        if (HAL::isLeft()) selector->goPreview();
-        else if (HAL::isRight()) selector->goNext();
-        else if (HAL::isConfirm()) open();
-        else if (HAL::isCancel()) close();
+        if (currentWidget == nullptr)
+        {
+            if (HAL::isLeft()) selector->goPreview();
+            else if (HAL::isRight()) selector->goNext();
+            else if (HAL::isConfirm()) open();
+            else if (HAL::isCancel()) close();
+        }
+        else
+        {
+            if (HAL::isLeft()) currentWidget->onLeft();
+            else if (HAL::isRight()) currentWidget->onRight();
+            else if (HAL::isConfirm()) currentWidget->onConfirm();
+            else if (HAL::isCancel()) currentWidget->onCancel();
+        }
 
         HAL::canvasUpdate();
 

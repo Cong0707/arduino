@@ -24,6 +24,11 @@ public:
   virtual void deInit() {}
   //open and close是启动器的事情 与控件无关
 
+public: // 处理用户输入
+  virtual void onLeft() {}
+  virtual void onRight() {}
+  virtual void onConfirm() {}
+  virtual void onCancel() {}
 public:
   //绘制控件在列表中的指示器
   virtual void renderIndicator(float _x, float _y, const std::vector<float> &_camera) {}
@@ -50,6 +55,12 @@ public:
 public:
   void init() override;
   void deInit() override;
+
+public:
+  void onLeft() override;
+  void onRight() override;
+  void onConfirm() override;
+  void onCancel() override;
 
 public:
   void renderIndicator(float _x, float _y, const std::vector<float> &_camera) override;
@@ -91,6 +102,12 @@ public:
 public:
   void init() override;
   void deInit() override;
+
+public:
+  void onLeft() override;
+  void onRight() override;
+  void onConfirm() override;
+  void onCancel() override;
 
 public:
   void renderIndicator(float _x, float _y, const std::vector<float> &_camera) override;
@@ -138,6 +155,12 @@ public:
 public:
   void init() override;
   void deInit() override;
+
+public:
+  void onLeft() override;
+  void onRight() override;
+  void onConfirm() override;
+  void onCancel() override;
 
 public:
   void renderIndicator(float _x, float _y, const std::vector<float> &_camera) override;
