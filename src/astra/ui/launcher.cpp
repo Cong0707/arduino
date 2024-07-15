@@ -101,7 +101,6 @@ namespace astra
         currentMenu->childPosInit(camera->getPosition());
 
         selector->inject(currentMenu);
-        //selector->go(currentPage->selectIndex);
 
         return true;
     }
@@ -134,7 +133,6 @@ namespace astra
         currentMenu->childPosInit(camera->getPosition());
 
         selector->inject(currentMenu);
-        //selector->go(currentPage->selectIndex);
 
         return true;
     }

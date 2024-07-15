@@ -61,17 +61,6 @@ namespace astra
         return true;
     }
 
-    bool Menu::addItem(Widget* _widget)
-    {
-        if (_widget == nullptr) return false; //判null
-
-        _widget->parent = this; //使子页面的父页面为自己
-        this->childMenu.push_back(_widget); //更新自己的子页面列表
-        this->forePosInit(); //更新自己的坐标
-        _widget->init();
-        return true;
-    }
-
 
     void List::childPosInit(const std::vector<float>& _camera)
     {
@@ -178,9 +167,9 @@ namespace astra
         for (auto _iter : childMenu)
         {
             //绘制控件在列表中的指示器
-            if (static_cast<Widget*>(_iter))
+            if (_iter->getType() == "Widget")
             {
-                static_cast<Widget*>(_iter)->renderIndicator(
+                reinterpret_cast<Widget*>(_iter)->renderIndicator(
                         systemConfig.screenWeight - astraConfig.checkBoxRightMargin - astraConfig.checkBoxWidth,
                         _iter->position.y + astraConfig.checkBoxTopMargin,
                         _camera);

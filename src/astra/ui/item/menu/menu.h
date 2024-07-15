@@ -90,7 +90,6 @@ namespace astra
 
     public:
         bool addItem(Menu* _page);
-        bool addItem(Widget* _widget); //新建一个带有控件的列表项
     };
 
     class List : public Menu

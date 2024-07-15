@@ -11,9 +11,6 @@ namespace astra
 {
     class CheckBox : public Widget
     {
-    public:
-        [[nodiscard]] std::string getType() const override { return "CheckBox"; }
-
     private:
         bool isCheck;
 
@@ -45,9 +42,6 @@ namespace astra
 
     class PopUp : public Widget
     {
-    public:
-        [[nodiscard]] std::string getType() const override { return "PopUp"; }
-
     public:
         typedef struct Position
         {
@@ -94,9 +88,6 @@ namespace astra
 
     class Slider : public Widget
     {
-    public:
-        [[nodiscard]] std::string getType() const override { return "Slider"; }
-
     public:
         typedef struct Position
         {
