@@ -167,6 +167,9 @@ namespace astra
         [[nodiscard]] std::string getType() const override { return "Widget"; }
 
     public:
+        void childPosInit(const std::vector<float>& _camera) override;
+        void forePosInit() override;
+
         Widget() = default;
 
     public:

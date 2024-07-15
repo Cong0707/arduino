@@ -68,6 +68,7 @@ namespace astra
         _widget->parent = this; //使子页面的父页面为自己
         this->childMenu.push_back(_widget); //更新自己的子页面列表
         this->forePosInit(); //更新自己的坐标
+        _widget->init();
         return true;
     }
 
@@ -408,4 +409,8 @@ namespace astra
         Animation::move(&positionForeground.wBar, positionForeground.wBarTrg, astraConfig.tileAnimationSpeed);
         Animation::move(&positionForeground.yBar, positionForeground.yBarTrg, astraConfig.tileAnimationSpeed);
     }
+
+    void Widget::childPosInit(const std::vector<float>& _camera) {}
+
+    void Widget::forePosInit() {}
 }

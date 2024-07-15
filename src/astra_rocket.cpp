@@ -89,7 +89,7 @@ void astraCoreInit()
     secondPage->addItem(new astra::PopUp("-测试测试3", "测试", 1, {"测试"}, testIndex));
     secondPage->addItem(new astra::Slider("-测试测试测试4","测试", 0, 100, 50, testSlider));
 
-    secondPage->addItem(new astra::List("-测试测试测试5"));
+    secondPage->addItem(new astra::Tile("-测试测试测试6"));
     secondPage->addItem(new astra::List("-测试测试测试6"));
     secondPage->addItem(new astra::List("-测试测试测试6"));
     secondPage->addItem(new astra::List("-测试测试测试6"));
