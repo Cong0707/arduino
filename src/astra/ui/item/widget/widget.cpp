@@ -18,8 +18,6 @@ namespace astra
 
     void CheckBox::onConfirm() { deInit(); }
 
-    void CheckBox::onCancel() { deInit(); }
-
     bool CheckBox::check()
     {
         value = true;
@@ -93,8 +91,6 @@ namespace astra
 
     void PopUp::onConfirm() { deInit(); }
 
-    void PopUp::onCancel() { deInit(); }
-
     void PopUp::selectNext()
     {
         if (value == boundary - 1) value = 0;
@@ -161,8 +157,6 @@ namespace astra
     void Slider::onRight() { sub(); }
 
     void Slider::onConfirm() { deInit(); }
-
-    void Slider::onCancel() { deInit(); }
 
     unsigned char Slider::add()
     {

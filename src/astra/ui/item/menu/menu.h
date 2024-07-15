@@ -65,7 +65,7 @@ namespace astra
     public:
         Menu* parent{};
         std::vector<Menu*> childMenu; //allow widget and menu.
-        std::vector<Widget*> childWidget;
+        Widget* childWidget;
         unsigned char selectIndex{};
 
         [[nodiscard]] unsigned char getItemNum() const;

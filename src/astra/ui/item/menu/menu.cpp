@@ -54,7 +54,7 @@ namespace astra
     bool Menu::addItem(Menu* _page)
     {
         if (_page == nullptr) return false; //判null
-        if (!_page->childWidget.empty()) return false; //判widget必须为空
+        if (_page->childWidget != nullptr) return false; //判widget必须为空
 
         _page->parent = this; //使子页面的父页面为自己
         this->childMenu.push_back(_page); //更新自己的子页面列表
@@ -67,7 +67,7 @@ namespace astra
         if (_anyWidget == nullptr) return false;
         if (this->addItem(_page))
         {
-            _page->childWidget.push_back(_anyWidget);
+            _page->childWidget = _anyWidget;
             _anyWidget->parent = _page;
             _anyWidget->init();
             return true;
@@ -123,7 +123,7 @@ namespace astra
 
         this->parent = nullptr;
         this->childMenu.clear();
-        this->childWidget.clear();
+        this->childWidget = nullptr;
 
         this->position = {};
         this->positionForeground = {};
@@ -138,7 +138,7 @@ namespace astra
 
         this->parent = nullptr;
         this->childMenu.clear();
-        this->childWidget.clear();
+        this->childWidget = nullptr;
 
         this->position = {};
         this->positionForeground = {};
@@ -153,7 +153,7 @@ namespace astra
 
         this->parent = nullptr;
         this->childMenu.clear();
-        this->childWidget.clear();
+        this->childWidget = nullptr;
 
         this->position = {};
         this->positionForeground = {};
@@ -168,7 +168,7 @@ namespace astra
 
         this->parent = nullptr;
         this->childMenu.clear();
-        this->childWidget.clear();
+        this->childWidget = nullptr;
 
         this->position = {};
         this->positionForeground = {};
@@ -184,7 +184,7 @@ namespace astra
         for (auto _iter : childMenu)
         {
             //绘制控件在列表中的指示器
-            if (!_iter->childWidget.empty())
+            if (_iter->childWidget != nullptr)
             {
                 for (auto _widget : _iter->childWidget)
                 {
@@ -297,7 +297,7 @@ namespace astra
 
         this->parent = nullptr;
         this->childMenu.clear();
-        this->childWidget.clear();
+        this->childWidget = nullptr;
 
         this->position = {};
         this->positionForeground = {};
@@ -312,7 +312,7 @@ namespace astra
 
         this->parent = nullptr;
         this->childMenu.clear();
-        this->childWidget.clear();
+        this->childWidget = nullptr;
 
         this->position = {};
         this->positionForeground = {};
@@ -327,7 +327,7 @@ namespace astra
 
         this->parent = nullptr;
         this->childMenu.clear();
-        this->childWidget.clear();
+        this->childWidget = nullptr;
 
         this->position = {};
         this->positionForeground = {};
@@ -342,7 +342,7 @@ namespace astra
 
         this->parent = nullptr;
         this->childMenu.clear();
-        this->childWidget.clear();
+        this->childWidget = nullptr;
 
         this->position = {};
         this->positionForeground = {};

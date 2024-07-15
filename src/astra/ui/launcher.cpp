@@ -191,7 +191,7 @@ namespace astra
             if (HAL::isLeft()) currentWidget->onLeft();
             else if (HAL::isRight()) currentWidget->onRight();
             else if (HAL::isConfirm()) currentWidget->onConfirm();
-            else if (HAL::isCancel()) currentWidget->onCancel();
+            else if (HAL::isCancel()) close();
         }
 
         HAL::canvasUpdate();

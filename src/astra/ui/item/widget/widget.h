@@ -30,14 +30,13 @@ namespace astra
         virtual void onLeft();
         virtual void onRight();
         virtual void onConfirm();
-        virtual void onCancel();
 
     public:
         //绘制控件在列表中的指示器
-        virtual void renderIndicator(float _x, float _y, const std::vector<float>& _camera);
+        virtual void renderIndicator(float _x, float _y, const std::vector<float>& _camera) {};
 
     public:
-        virtual void render(const std::vector<float>& _camera);
+        virtual void render(const std::vector<float>& _camera) {};
     };
 
     class CheckBox : public Widget
@@ -64,7 +63,6 @@ namespace astra
         void onLeft() override;
         void onRight() override;
         void onConfirm() override;
-        void onCancel() override;
 
     public:
         void renderIndicator(float _x, float _y, const std::vector<float>& _camera) override;
@@ -113,7 +111,6 @@ namespace astra
         void onLeft() override;
         void onRight() override;
         void onConfirm() override;
-        void onCancel() override;
 
     public:
         void renderIndicator(float _x, float _y, const std::vector<float>& _camera) override;
@@ -168,7 +165,6 @@ namespace astra
         void onLeft() override;
         void onRight() override;
         void onConfirm() override;
-        void onCancel() override;
 
     public:
         void renderIndicator(float _x, float _y, const std::vector<float>& _camera) override;
