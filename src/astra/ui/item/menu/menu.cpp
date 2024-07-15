@@ -54,7 +54,6 @@ namespace astra
     bool Menu::addItem(Menu* _page)
     {
         if (_page == nullptr) return false; //判null
-        if (_page->childWidget != nullptr) return false; //判widget必须为空
 
         _page->parent = this; //使子页面的父页面为自己
         this->childMenu.push_back(_page); //更新自己的子页面列表
@@ -62,18 +61,16 @@ namespace astra
         return true;
     }
 
-    bool Menu::addItem(Menu* _page, Widget* _anyWidget)
+    bool Menu::addItem(Widget* _widget)
     {
-        if (_anyWidget == nullptr) return false;
-        if (this->addItem(_page))
-        {
-            _page->childWidget = _anyWidget;
-            _anyWidget->parent = _page;
-            _anyWidget->init();
-            return true;
-        }
-        else return false;
+        if (_widget == nullptr) return false; //判null
+
+        _widget->parent = this; //使子页面的父页面为自己
+        this->childMenu.push_back(_widget); //更新自己的子页面列表
+        this->forePosInit(); //更新自己的坐标
+        return true;
     }
+
 
     void List::childPosInit(const std::vector<float>& _camera)
     {
@@ -123,7 +120,6 @@ namespace astra
 
         this->parent = nullptr;
         this->childMenu.clear();
-        this->childWidget = nullptr;
 
         this->position = {};
         this->positionForeground = {};
@@ -138,7 +134,6 @@ namespace astra
 
         this->parent = nullptr;
         this->childMenu.clear();
-        this->childWidget = nullptr;
 
         this->position = {};
         this->positionForeground = {};
@@ -153,7 +148,6 @@ namespace astra
 
         this->parent = nullptr;
         this->childMenu.clear();
-        this->childWidget = nullptr;
 
         this->position = {};
         this->positionForeground = {};
@@ -168,7 +162,6 @@ namespace astra
 
         this->parent = nullptr;
         this->childMenu.clear();
-        this->childWidget = nullptr;
 
         this->position = {};
         this->positionForeground = {};
@@ -184,15 +177,12 @@ namespace astra
         for (auto _iter : childMenu)
         {
             //绘制控件在列表中的指示器
-            if (_iter->childWidget != nullptr)
+            if (static_cast<Widget*>(_iter))
             {
-                for (auto _widget : _iter->childWidget)
-                {
-                    _widget->renderIndicator(
+                static_cast<Widget*>(_iter)->renderIndicator(
                         systemConfig.screenWeight - astraConfig.checkBoxRightMargin - astraConfig.checkBoxWidth,
                         _iter->position.y + astraConfig.checkBoxTopMargin,
                         _camera);
-                }
             }
             //绘制文字
             HAL::drawChinese(_iter->position.x + _camera[0],
@@ -297,7 +287,6 @@ namespace astra
 
         this->parent = nullptr;
         this->childMenu.clear();
-        this->childWidget = nullptr;
 
         this->position = {};
         this->positionForeground = {};
@@ -312,7 +301,6 @@ namespace astra
 
         this->parent = nullptr;
         this->childMenu.clear();
-        this->childWidget = nullptr;
 
         this->position = {};
         this->positionForeground = {};
@@ -327,7 +315,6 @@ namespace astra
 
         this->parent = nullptr;
         this->childMenu.clear();
-        this->childWidget = nullptr;
 
         this->position = {};
         this->positionForeground = {};
@@ -342,7 +329,6 @@ namespace astra
 
         this->parent = nullptr;
         this->childMenu.clear();
-        this->childWidget = nullptr;
 
         this->position = {};
         this->positionForeground = {};

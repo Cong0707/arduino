@@ -3,42 +3,12 @@
 #define ASTRA_WIDGET__H
 
 #include <vector>
+#include <astra/ui/item/menu/menu.h>
 
 #include "../item.h"
 
 namespace astra
 {
-    class Widget : public Item
-    {
-    public:
-        void* parent{};
-        unsigned char value{};
-
-    public:
-        [[nodiscard]] virtual std::string getType() const { return "base"; }
-
-    public:
-        Widget() = default;
-
-    public:
-        virtual void init();
-        virtual void deInit();
-
-        //open and close是启动器的事情 与控件无关
-
-    public: // 处理用户输入
-        virtual void onLeft();
-        virtual void onRight();
-        virtual void onConfirm();
-
-    public:
-        //绘制控件在列表中的指示器
-        virtual void renderIndicator(float _x, float _y, const std::vector<float>& _camera) {};
-
-    public:
-        virtual void render(const std::vector<float>& _camera) {};
-    };
-
     class CheckBox : public Widget
     {
     public:
@@ -48,7 +18,9 @@ namespace astra
         bool isCheck;
 
     public:
-        explicit CheckBox(bool& _value); //check box.
+        explicit CheckBox(
+            const std::string& _title,
+            bool& _value); //check box.
 
     public:
         bool check();
@@ -86,17 +58,18 @@ namespace astra
         Position position{};
 
     private:
-        std::string title;
+        std::string text;
         std::vector<std::string> options;
         unsigned char direction;
         unsigned char boundary;
 
     public:
         // 0: left 1: top 2: right 3: bottom
-        PopUp(unsigned char _direction,
-              const std::string& _title,
-              const std::vector<std::string>& _options,
-              unsigned char& _value); //pop up.
+        PopUp(const std::string& _title,
+            const std::string& _text,
+            unsigned char _direction,
+            const std::vector<std::string>& _options,
+            unsigned char& _value); //pop up.
 
     public:
         void selectNext();
@@ -136,7 +109,7 @@ namespace astra
         Position position{};
 
     private:
-        std::string title;
+        std::string text;
         unsigned char maxLength;
         unsigned char min;
         unsigned char max;
@@ -148,6 +121,7 @@ namespace astra
 
     public:
         Slider(const std::string& _title,
+               const std::string& _text,
                unsigned char _min,
                unsigned char _max,
                unsigned char _step,

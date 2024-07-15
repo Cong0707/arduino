@@ -10,10 +10,11 @@
 #include "string"
 #include <vector>
 #include "../item.h"
-#include "../widget/widget.h"
 
 namespace astra
 {
+    class Widget;
+
     class Menu : public Item
     {
     public:
@@ -65,7 +66,6 @@ namespace astra
     public:
         Menu* parent{};
         std::vector<Menu*> childMenu; //allow widget and menu.
-        Widget* childWidget;
         unsigned char selectIndex{};
 
         [[nodiscard]] unsigned char getItemNum() const;
@@ -90,7 +90,7 @@ namespace astra
 
     public:
         bool addItem(Menu* _page);
-        bool addItem(Menu* _page, Widget* _anyWidget); //新建一个带有控件的列表项
+        bool addItem(Widget* _widget); //新建一个带有控件的列表项
     };
 
     class List : public Menu
@@ -156,6 +156,34 @@ namespace astra
 
     public:
         void render(const std::vector<float>& _camera) override;
+    };
+
+    class Widget : public Menu
+    {
+    public:
+        unsigned char value{};
+
+    public:
+        [[nodiscard]] std::string getType() const override { return "Widget"; }
+
+    public:
+        Widget() = default;
+
+    public:
+        virtual void init() {};
+        virtual void deInit() {};
+
+    public: // 处理用户输入
+        virtual void onLeft() {};
+        virtual void onRight() {};
+        virtual void onConfirm() {};
+
+    public:
+        //绘制控件在列表中的指示器
+        virtual void renderIndicator(float _x, float _y, const std::vector<float>& _camera) {};
+
+    public:
+        virtual void render(const std::vector<float>& _camera) {};
     };
 }
 

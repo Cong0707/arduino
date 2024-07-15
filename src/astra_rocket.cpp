@@ -6,6 +6,7 @@
 #include "astra_rocket.h"
 
 #include <iomanip>
+#include <astra/ui/item/widget/widget.h>
 
 #include "astra/astra_logo.h"
 #include "hal/cong/TFTHAL.h"
@@ -84,9 +85,9 @@ void astraCoreInit()
     bool test = false;
     unsigned char testIndex = 0;
     unsigned char testSlider = 60;
-    secondPage->addItem(new astra::List("-测试2"), new astra::CheckBox(test));
-    secondPage->addItem(new astra::Tile("-测试测试3"), new astra::PopUp(1, "测试", {"测试"}, testIndex));
-    secondPage->addItem(new astra::Tile("-测试测试测试4"), new astra::Slider("测试", 0, 100, 50, testSlider));
+    secondPage->addItem(new astra::CheckBox("-测试2", test));
+    secondPage->addItem(new astra::PopUp("-测试测试3", "测试", 1, {"测试"}, testIndex));
+    secondPage->addItem(new astra::Slider("-测试测试测试4","测试", 0, 100, 50, testSlider));
 
     secondPage->addItem(new astra::List("-测试测试测试5"));
     secondPage->addItem(new astra::List("-测试测试测试6"));

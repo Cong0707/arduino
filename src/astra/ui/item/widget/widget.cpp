@@ -4,8 +4,9 @@
 
 namespace astra
 {
-    CheckBox::CheckBox(bool& _value)
+    CheckBox::CheckBox(const std::string& _title, bool& _value)
     {
+        title = _title;
         value = _value;
         if (value) isCheck = true;
         else isCheck = false;
@@ -72,13 +73,15 @@ namespace astra
         //todo 选中复选框后弹出消息提醒 这玩意现在我倒觉得没啥必要 可以暂时不做
     }
 
-    PopUp::PopUp(unsigned char _direction,
-                 const std::string& _title,
+    PopUp::PopUp(const std::string& _title,
+                 const std::string& _text,
+                 unsigned char _direction,
                  const std::vector<std::string>& _options,
                  unsigned char& _value)
     {
-        direction = _direction;
         title = _title;
+        text = _text;
+        direction = _direction;
         options = _options;
         boundary = options.size();
         value = _value;
@@ -134,12 +137,14 @@ namespace astra
     }
 
     Slider::Slider(const std::string& _title,
+                   const std::string& _text,
                    unsigned char _min,
                    unsigned char _max,
                    unsigned char _step,
                    unsigned char& _value)
     {
         title = _title;
+        text = _text;
         maxLength = 0;
         min = _min;
         max = _max;
