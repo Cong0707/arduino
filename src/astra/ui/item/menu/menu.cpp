@@ -398,8 +398,4 @@ namespace astra
         Animation::move(&positionForeground.wBar, positionForeground.wBarTrg, astraConfig.tileAnimationSpeed);
         Animation::move(&positionForeground.yBar, positionForeground.yBarTrg, astraConfig.tileAnimationSpeed);
     }
-
-    void Widget::childPosInit(const std::vector<float>& _camera) {}
-
-    void Widget::forePosInit() {}
 }

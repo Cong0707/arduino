@@ -166,9 +166,6 @@ namespace astra
         [[nodiscard]] std::string getType() const override { return "Widget"; }
 
     public:
-        void childPosInit(const std::vector<float>& _camera) override;
-        void forePosInit() override;
-
         Widget() = default;
 
     public:
@@ -183,9 +180,20 @@ namespace astra
     public:
         //绘制控件在列表中的指示器
         virtual void renderIndicator(float _x, float _y, const std::vector<float>& _camera) {};
+    };
+
+    class Page : public Menu
+    {
+    public:
+        [[nodiscard]] std::string getType() const override { return "Page"; }
 
     public:
-        virtual void render(const std::vector<float>& _camera) {};
+        Page() = default;
+
+    public: // 处理用户输入
+        virtual void onLeft() {};
+        virtual void onRight() {};
+        virtual void onConfirm() {};
     };
 }
 
