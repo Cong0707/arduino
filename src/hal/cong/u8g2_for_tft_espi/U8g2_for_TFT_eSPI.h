@@ -47,178 +47,229 @@
 //========================================================
 
 
-
 struct _u8g2_font_info_t
 {
-  /* offset 0 */
-  uint8_t glyph_cnt;
-  uint8_t bbx_mode;
-  uint8_t bits_per_0;
-  uint8_t bits_per_1;
-  
-  /* offset 4 */
-  uint8_t bits_per_char_width;
-  uint8_t bits_per_char_height;    
-  uint8_t bits_per_char_x;
-  uint8_t bits_per_char_y;
-  uint8_t bits_per_delta_x;
-  
-  /* offset 9 */
-  int8_t max_char_width;
-  int8_t max_char_height; /* overall height, NOT ascent. Instead ascent = max_char_height + y_offset */
-  int8_t x_offset;
-  int8_t y_offset;
-  
-  /* offset 13 */
-  int8_t  ascent_A;
-  int8_t  descent_g;  /* usually a negative value */
-  int8_t  ascent_para;
-  int8_t  descent_para;
-    
-  /* offset 17 */
-  uint16_t start_pos_upper_A;
-  uint16_t start_pos_lower_a; 
-  
-  /* offset 21 */
-  uint16_t start_pos_unicode;
+    /* offset 0 */
+    uint8_t glyph_cnt;
+    uint8_t bbx_mode;
+    uint8_t bits_per_0;
+    uint8_t bits_per_1;
+
+    /* offset 4 */
+    uint8_t bits_per_char_width;
+    uint8_t bits_per_char_height;
+    uint8_t bits_per_char_x;
+    uint8_t bits_per_char_y;
+    uint8_t bits_per_delta_x;
+
+    /* offset 9 */
+    int8_t max_char_width;
+    int8_t max_char_height; /* overall height, NOT ascent. Instead ascent = max_char_height + y_offset */
+    int8_t x_offset;
+    int8_t y_offset;
+
+    /* offset 13 */
+    int8_t ascent_A;
+    int8_t descent_g; /* usually a negative value */
+    int8_t ascent_para;
+    int8_t descent_para;
+
+    /* offset 17 */
+    uint16_t start_pos_upper_A;
+    uint16_t start_pos_lower_a;
+
+    /* offset 21 */
+    uint16_t start_pos_unicode;
 };
+
 typedef struct _u8g2_font_info_t u8g2_font_info_t;
 
 struct _u8g2_font_decode_t
 {
-  const uint8_t *decode_ptr;      /* pointer to the compressed data */
-  
-  int16_t target_x;
-  int16_t target_y;
-  uint16_t fg_color;
-  uint16_t bg_color;
-  
-  int8_t x;           /* local coordinates, (0,0) is upper left */
-  int8_t y;
-  int8_t glyph_width; 
-  int8_t glyph_height;
+    const uint8_t* decode_ptr; /* pointer to the compressed data */
 
-  uint8_t decode_bit_pos;     /* bitpos inside a byte of the compressed data */
-  uint8_t is_transparent;
-  uint8_t dir;        /* direction */
+    int16_t target_x;
+    int16_t target_y;
+    uint16_t fg_color;
+    uint16_t bg_color;
+
+    int8_t x; /* local coordinates, (0,0) is upper left */
+    int8_t y;
+    int8_t glyph_width;
+    int8_t glyph_height;
+
+    uint8_t decode_bit_pos; /* bitpos inside a byte of the compressed data */
+    uint8_t is_transparent;
+    uint8_t dir; /* direction */
 };
+
 typedef struct _u8g2_font_decode_t u8g2_font_decode_t;
 
 
 struct _u8g2_font_t
 {
-  TFT_eSPI *tft;
-  
-  /* information about the current font */
-  const uint8_t *font;             /* current font for all text procedures */
-  
-  //u8g2_font_calc_vref_fnptr font_calc_vref;
-  u8g2_font_decode_t font_decode;   /* new font decode structure */
-  u8g2_font_info_t font_info;     /* new font info structure */
+    TFT_eSPI* tft;
 
-  //uint8_t font_height_mode;
-  //int8_t font_ref_ascent;
-  //int8_t font_ref_descent;
+    /* information about the current font */
+    const uint8_t* font; /* current font for all text procedures */
 
-  int8_t glyph_x_offset;    /* set by u8g2_GetGlyphWidth as a side effect */
+    //u8g2_font_calc_vref_fnptr font_calc_vref;
+    u8g2_font_decode_t font_decode; /* new font decode structure */
+    u8g2_font_info_t font_info; /* new font info structure */
+
+    //uint8_t font_height_mode;
+    //int8_t font_ref_ascent;
+    //int8_t font_ref_descent;
+
+    int8_t glyph_x_offset; /* set by u8g2_GetGlyphWidth as a side effect */
 };
+
 typedef struct _u8g2_font_t u8g2_font_t;
 
 
-uint8_t u8g2_IsGlyph(u8g2_font_t *u8g2, uint16_t requested_encoding);
-int8_t u8g2_GetGlyphWidth(u8g2_font_t *u8g2, uint16_t requested_encoding);
-void u8g2_SetFontMode(u8g2_font_t *u8g2, uint8_t is_transparent);
-void u8g2_SetFontDirection(u8g2_font_t *u8g2, uint8_t dir);
-int16_t u8g2_DrawGlyph(u8g2_font_t *u8g2, int16_t x, int16_t y, uint16_t encoding);
-int16_t u8g2_DrawStr(u8g2_font_t *u8g2, int16_t x, int16_t y, const char *s);
-void u8g2_SetFont(u8g2_font_t *u8g2, const uint8_t  *font);
-void u8g2_SetForegroundColor(u8g2_font_t *u8g2, uint16_t fg);
-void u8g2_SetBackgroundColor(u8g2_font_t *u8g2, uint16_t bg);
+uint8_t u8g2_IsGlyph(u8g2_font_t* u8g2, uint16_t requested_encoding);
+int8_t u8g2_GetGlyphWidth(u8g2_font_t* u8g2, uint16_t requested_encoding);
+void u8g2_SetFontMode(u8g2_font_t* u8g2, uint8_t is_transparent);
+void u8g2_SetFontDirection(u8g2_font_t* u8g2, uint8_t dir);
+int16_t u8g2_DrawGlyph(u8g2_font_t* u8g2, int16_t x, int16_t y, uint16_t encoding);
+int16_t u8g2_DrawStr(u8g2_font_t* u8g2, int16_t x, int16_t y, const char* s);
+void u8g2_SetFont(u8g2_font_t* u8g2, const uint8_t* font);
+void u8g2_SetForegroundColor(u8g2_font_t* u8g2, uint16_t fg);
+void u8g2_SetBackgroundColor(u8g2_font_t* u8g2, uint16_t bg);
 
 
-class U8g2_for_TFT_eSPI : public Print {
-  public:
+class U8g2_for_TFT_eSPI : public Print
+{
+public:
     u8g2_font_t u8g2;
-    int16_t tx, ty;       // current position for the print command
-    uint16_t encoding;    // the unicode, detected by the utf-8 decoder
-    uint8_t utf8_state;   // current state of the utf-8 decoder, contains the remaining bytes for a detected unicode glyph 
+    int16_t tx, ty; // current position for the print command
+    uint16_t encoding; // the unicode, detected by the utf-8 decoder
+    uint8_t utf8_state;
+    // current state of the utf-8 decoder, contains the remaining bytes for a detected unicode glyph
 
-    void home(void) 
-      { tx = 0; ty = 0;  utf8_state = 0; }
-    void setCursor(int16_t x, int16_t y) 
-      { tx = x; ty = y; utf8_state = 0;  }
+    void home(void)
+    {
+        tx = 0;
+        ty = 0;
+        utf8_state = 0;
+    }
+
+    void setCursor(int16_t x, int16_t y)
+    {
+        tx = x;
+        ty = y;
+        utf8_state = 0;
+    }
+
     int16_t getCursorX(void) { return tx; }
     int16_t getCursorY(void) { return ty; }
-  
-    U8g2_for_TFT_eSPI(void) {u8g2.font = NULL; u8g2.font_decode.fg_color = 1; u8g2.font_decode.is_transparent = 1; u8g2.font_decode.dir = 0; home(); } 
-    void begin(TFT_eSPI &tft) { u8g2.tft = &tft; }
-    void setFont(const uint8_t *font)             // set u8g2 font
-      { u8g2_SetFont(&u8g2, font); }
-    void setFontMode(uint8_t is_transparent)      // is_transparent==0: Background is not drawn
-      { u8g2_SetFontMode(&u8g2, is_transparent); }
-    void setFontDirection(uint8_t d)              // 0; 0 degree, 1: 90 degree, 2: 180 degree, 3: 270 degree
-      { u8g2_SetFontDirection(&u8g2, d); }
-    void setForegroundColor(uint16_t fg)           // Use this color to draw the text
-      { u8g2_SetForegroundColor(&u8g2, fg); }
-    void setBackgroundColor(uint16_t bg)           // only used for setFontMode(0)
-      { u8g2_SetBackgroundColor(&u8g2, bg); }
-    int8_t getFontAscent(void)
-      { return u8g2.font_info.ascent_A; }
-    int8_t getFontDescent(void)
-      { return u8g2.font_info.descent_g; }
-    int16_t drawGlyph(int16_t x, int16_t y, uint16_t e)
-      { return u8g2_DrawGlyph(&u8g2, x, y, e); }           // draw a signle char (e == Unicode)
-    int16_t drawStr(int16_t x, int16_t y, const char *s)
-      { return u8g2_DrawStr(&u8g2, x, y, s); } 
 
-    int16_t drawUTF8(int16_t x, int16_t y, const char *str);
-    int16_t getUTF8Width(const char *str);
-    
+    U8g2_for_TFT_eSPI(void)
+    {
+        u8g2.font = NULL;
+        u8g2.font_decode.fg_color = 1;
+        u8g2.font_decode.is_transparent = 1;
+        u8g2.font_decode.dir = 0;
+        home();
+    }
+
+    void begin(TFT_eSPI& tft) { u8g2.tft = &tft; }
+
+    void setFont(const uint8_t* font) // set u8g2 font
+    {
+        u8g2_SetFont(&u8g2, font);
+    }
+
+    void setFontMode(uint8_t is_transparent) // is_transparent==0: Background is not drawn
+    {
+        u8g2_SetFontMode(&u8g2, is_transparent);
+    }
+
+    void setFontDirection(uint8_t d) // 0; 0 degree, 1: 90 degree, 2: 180 degree, 3: 270 degree
+    {
+        u8g2_SetFontDirection(&u8g2, d);
+    }
+
+    void setForegroundColor(uint16_t fg) // Use this color to draw the text
+    {
+        u8g2_SetForegroundColor(&u8g2, fg);
+    }
+
+    void setBackgroundColor(uint16_t bg) // only used for setFontMode(0)
+    {
+        u8g2_SetBackgroundColor(&u8g2, bg);
+    }
+
+    int8_t getFontAscent(void)
+    {
+        return u8g2.font_info.ascent_A;
+    }
+
+    int8_t getFontDescent(void)
+    {
+        return u8g2.font_info.descent_g;
+    }
+
+    int16_t drawGlyph(int16_t x, int16_t y, uint16_t e)
+    {
+        return u8g2_DrawGlyph(&u8g2, x, y, e);
+    } // draw a signle char (e == Unicode)
+    int16_t drawStr(int16_t x, int16_t y, const char* s)
+    {
+        return u8g2_DrawStr(&u8g2, x, y, s);
+    }
+
+    int16_t drawUTF8(int16_t x, int16_t y, const char* str);
+    int16_t getUTF8Width(const char* str);
+
 
     uint16_t utf8_next(uint8_t b);
 
-    size_t write(uint8_t v) {
-      uint16_t e = utf8_next(v);
-      int16_t delta;
-      
-      if ( e == '\n' )
-      {
-	tx = 0;
-	ty += u8g2.font_info.ascent_para - u8g2.font_info.descent_para;
-      }
-      else if ( e == '\r' )
-      {
-	tx = 0;
-      }
-      else if ( e < 0x0fffe )
-      {
-        delta = drawGlyph(tx, ty, e);
-        switch(u8g2.font_decode.dir)
-        {
-          case 0:
-            tx += delta;
-            break;
-          case 1:
-            ty += delta;
-            break;
-          case 2:
-            tx -= delta;
-            break;
-          case 3:
-            ty -= delta;
-            break;
-        }        
-      }
-      return 1;
-     }
+    size_t write(uint8_t v)
+    {
+        uint16_t e = utf8_next(v);
+        int16_t delta;
 
-    size_t write(const uint8_t *buffer, size_t size) {
-      size_t cnt = 0;
-      while( size > 0 ) {
-          cnt += write(*buffer++); 
-          size--;
-      }
-      return cnt;
+        if (e == '\n')
+        {
+            tx = 0;
+            ty += u8g2.font_info.ascent_para - u8g2.font_info.descent_para;
+        }
+        else if (e == '\r')
+        {
+            tx = 0;
+        }
+        else if (e < 0x0fffe)
+        {
+            delta = drawGlyph(tx, ty, e);
+            switch (u8g2.font_decode.dir)
+            {
+            case 0:
+                tx += delta;
+                break;
+            case 1:
+                ty += delta;
+                break;
+            case 2:
+                tx -= delta;
+                break;
+            case 3:
+                ty -= delta;
+                break;
+            }
+        }
+        return 1;
+    }
+
+    size_t write(const uint8_t* buffer, size_t size)
+    {
+        size_t cnt = 0;
+        while (size > 0)
+        {
+            cnt += write(*buffer++);
+            size--;
+        }
+        return cnt;
     }
 };
 
@@ -720,7 +771,8 @@ extern const uint8_t u8g2_font_roentgen_nbp_h_all[] U8G2_FONT_SECTION("u8g2_font
 extern const uint8_t u8g2_font_calibration_gothic_nbp_tf[] U8G2_FONT_SECTION("u8g2_font_calibration_gothic_nbp_tf");
 extern const uint8_t u8g2_font_calibration_gothic_nbp_tr[] U8G2_FONT_SECTION("u8g2_font_calibration_gothic_nbp_tr");
 extern const uint8_t u8g2_font_calibration_gothic_nbp_tn[] U8G2_FONT_SECTION("u8g2_font_calibration_gothic_nbp_tn");
-extern const uint8_t u8g2_font_calibration_gothic_nbp_t_all[] U8G2_FONT_SECTION("u8g2_font_calibration_gothic_nbp_t_all");
+extern const uint8_t u8g2_font_calibration_gothic_nbp_t_all[] U8G2_FONT_SECTION(
+    "u8g2_font_calibration_gothic_nbp_t_all");
 extern const uint8_t u8g2_font_smart_patrol_nbp_tf[] U8G2_FONT_SECTION("u8g2_font_smart_patrol_nbp_tf");
 extern const uint8_t u8g2_font_smart_patrol_nbp_tr[] U8G2_FONT_SECTION("u8g2_font_smart_patrol_nbp_tr");
 extern const uint8_t u8g2_font_smart_patrol_nbp_tn[] U8G2_FONT_SECTION("u8g2_font_smart_patrol_nbp_tn");
@@ -918,7 +970,8 @@ extern const uint8_t u8g2_font_Georgia7px_te[] U8G2_FONT_SECTION("u8g2_font_Geor
 extern const uint8_t u8g2_font_Wizzard_tr[] U8G2_FONT_SECTION("u8g2_font_Wizzard_tr");
 extern const uint8_t u8g2_font_HelvetiPixelOutline_tr[] U8G2_FONT_SECTION("u8g2_font_HelvetiPixelOutline_tr");
 extern const uint8_t u8g2_font_HelvetiPixelOutline_te[] U8G2_FONT_SECTION("u8g2_font_HelvetiPixelOutline_te");
-extern const uint8_t u8g2_font_Untitled16PixelSansSerifBitmap_tr[] U8G2_FONT_SECTION("u8g2_font_Untitled16PixelSansSerifBitmap_tr");
+extern const uint8_t u8g2_font_Untitled16PixelSansSerifBitmap_tr[] U8G2_FONT_SECTION(
+    "u8g2_font_Untitled16PixelSansSerifBitmap_tr");
 extern const uint8_t u8g2_font_etl14thai_t[] U8G2_FONT_SECTION("u8g2_font_etl14thai_t");
 extern const uint8_t u8g2_font_etl16thai_t[] U8G2_FONT_SECTION("u8g2_font_etl16thai_t");
 extern const uint8_t u8g2_font_etl24thai_t[] U8G2_FONT_SECTION("u8g2_font_etl24thai_t");
@@ -1366,12 +1419,18 @@ extern const uint8_t u8g2_font_maniac_tf[] U8G2_FONT_SECTION("u8g2_font_maniac_t
 extern const uint8_t u8g2_font_maniac_tr[] U8G2_FONT_SECTION("u8g2_font_maniac_tr");
 extern const uint8_t u8g2_font_maniac_tn[] U8G2_FONT_SECTION("u8g2_font_maniac_tn");
 extern const uint8_t u8g2_font_maniac_te[] U8G2_FONT_SECTION("u8g2_font_maniac_te");
-extern const uint8_t u8g2_font_lucasarts_scumm_subtitle_o_tf[] U8G2_FONT_SECTION("u8g2_font_lucasarts_scumm_subtitle_o_tf");
-extern const uint8_t u8g2_font_lucasarts_scumm_subtitle_o_tr[] U8G2_FONT_SECTION("u8g2_font_lucasarts_scumm_subtitle_o_tr");
-extern const uint8_t u8g2_font_lucasarts_scumm_subtitle_o_tn[] U8G2_FONT_SECTION("u8g2_font_lucasarts_scumm_subtitle_o_tn");
-extern const uint8_t u8g2_font_lucasarts_scumm_subtitle_r_tf[] U8G2_FONT_SECTION("u8g2_font_lucasarts_scumm_subtitle_r_tf");
-extern const uint8_t u8g2_font_lucasarts_scumm_subtitle_r_tr[] U8G2_FONT_SECTION("u8g2_font_lucasarts_scumm_subtitle_r_tr");
-extern const uint8_t u8g2_font_lucasarts_scumm_subtitle_r_tn[] U8G2_FONT_SECTION("u8g2_font_lucasarts_scumm_subtitle_r_tn");
+extern const uint8_t u8g2_font_lucasarts_scumm_subtitle_o_tf[] U8G2_FONT_SECTION(
+    "u8g2_font_lucasarts_scumm_subtitle_o_tf");
+extern const uint8_t u8g2_font_lucasarts_scumm_subtitle_o_tr[] U8G2_FONT_SECTION(
+    "u8g2_font_lucasarts_scumm_subtitle_o_tr");
+extern const uint8_t u8g2_font_lucasarts_scumm_subtitle_o_tn[] U8G2_FONT_SECTION(
+    "u8g2_font_lucasarts_scumm_subtitle_o_tn");
+extern const uint8_t u8g2_font_lucasarts_scumm_subtitle_r_tf[] U8G2_FONT_SECTION(
+    "u8g2_font_lucasarts_scumm_subtitle_r_tf");
+extern const uint8_t u8g2_font_lucasarts_scumm_subtitle_r_tr[] U8G2_FONT_SECTION(
+    "u8g2_font_lucasarts_scumm_subtitle_r_tr");
+extern const uint8_t u8g2_font_lucasarts_scumm_subtitle_r_tn[] U8G2_FONT_SECTION(
+    "u8g2_font_lucasarts_scumm_subtitle_r_tn");
 extern const uint8_t u8g2_font_fub11_tf[] U8G2_FONT_SECTION("u8g2_font_fub11_tf");
 extern const uint8_t u8g2_font_fub11_tr[] U8G2_FONT_SECTION("u8g2_font_fub11_tr");
 extern const uint8_t u8g2_font_fub11_tn[] U8G2_FONT_SECTION("u8g2_font_fub11_tn");
@@ -1667,5 +1726,3 @@ extern const uint8_t u8g2_font_px437wyse700b_mn[] U8G2_FONT_SECTION("u8g2_font_p
 
 
 #endif /* U8g2_for_TFT_eSPI_h */
-
-

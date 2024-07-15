@@ -9,30 +9,31 @@
 #include "item/selector/selector.h"
 #include "item/camera/camera.h"
 
-namespace astra {
+namespace astra
+{
+    class Launcher
+    {
+    private:
+        Menu* currentMenu;
+        Widget* currentWidget = nullptr;
+        Selector* selector;
+        Camera* camera;
 
-class Launcher {
-private:
-  Menu* currentMenu;
-  Widget* currentWidget = nullptr;
-  Selector* selector;
-  Camera* camera;
+        uint64_t time;
 
-  uint64_t time;
+    public:
+        void popInfo(std::string _info, uint16_t _time);
 
-public:
-  void popInfo(std::string _info, uint16_t _time);
+        void init(Menu* _rootPage);
 
-  void init(Menu* _rootPage);
+        bool open();
+        bool close();
 
-  bool open();
-  bool close();
+        void update();
 
-  void update();
-
-  Camera* getCamera() { return camera; }
-  Selector* getSelector() { return selector; }
-};
+        Camera* getCamera() { return camera; }
+        Selector* getSelector() { return selector; }
+    };
 }
 
 #endif //ASTRA_CORE_SRC_ASTRA_UI_SCHEDULER_H_

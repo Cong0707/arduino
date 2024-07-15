@@ -6,168 +6,196 @@
 
 #include "../item.h"
 
-namespace astra {
+namespace astra
+{
+  class Widget : public Item
+  {
+  public:
+    void* parent{};
+    unsigned char value{};
 
-class Widget : public Item {
-public:
-  void *parent{};
-  unsigned char value{};
+  public:
+    [[nodiscard]] virtual std::string getType() const { return "base"; }
 
-public:
-  [[nodiscard]] virtual std::string getType() const { return "base"; }
+  public:
+    Widget() = default;
 
-public:
-  Widget() = default;
+  public:
+    virtual void init()
+    {
+    }
 
-public:
-  virtual void init() {}
-  virtual void deInit() {}
-  //open and close是启动器的事情 与控件无关
+    virtual void deInit()
+    {
+    }
 
-public: // 处理用户输入
-  virtual void onLeft() {}
-  virtual void onRight() {}
-  virtual void onConfirm() {}
-  virtual void onCancel() {}
-public:
-  //绘制控件在列表中的指示器
-  virtual void renderIndicator(float _x, float _y, const std::vector<float> &_camera) {}
+    //open and close是启动器的事情 与控件无关
 
-public:
-  virtual void render(const std::vector<float> &_camera) {}
-};
+  public: // 处理用户输入
+    virtual void onLeft()
+    {
+    }
 
-class CheckBox : public Widget {
-public:
-  [[nodiscard]] std::string getType() const override { return "CheckBox"; }
+    virtual void onRight()
+    {
+    }
 
-private:
-  bool isCheck;
+    virtual void onConfirm()
+    {
+    }
 
-public:
-  explicit CheckBox(bool &_value);  //check box.
+    virtual void onCancel()
+    {
+    }
 
-public:
-  bool check();
-  bool uncheck();
-  bool toggle();
+  public:
+    //绘制控件在列表中的指示器
+    virtual void renderIndicator(float _x, float _y, const std::vector<float>& _camera)
+    {
+    }
 
-public:
-  void init() override;
-  void deInit() override;
+  public:
+    virtual void render(const std::vector<float>& _camera)
+    {
+    }
+  };
 
-public:
-  void onLeft() override;
-  void onRight() override;
-  void onConfirm() override;
-  void onCancel() override;
+  class CheckBox : public Widget
+  {
+  public:
+    [[nodiscard]] std::string getType() const override { return "CheckBox"; }
 
-public:
-  void renderIndicator(float _x, float _y, const std::vector<float> &_camera) override;
+  private:
+    bool isCheck;
 
-public:
-  void render(const std::vector<float> &_camera) override;
-};
+  public:
+    explicit CheckBox(bool& _value); //check box.
 
-class PopUp : public Widget {
-public:
-  [[nodiscard]] std::string getType() const override { return "PopUp"; }
+  public:
+    bool check();
+    bool uncheck();
+    bool toggle();
 
-public:
-  typedef struct Position {
-    float x, xTrg;
-    float y, yTrg;
-  } Position;
+  public:
+    void init() override;
+    void deInit() override;
 
-  Position position{};
+  public:
+    void onLeft() override;
+    void onRight() override;
+    void onConfirm() override;
+    void onCancel() override;
 
-private:
-  std::string title;
-  std::vector<std::string> options;
-  unsigned char direction;
-  unsigned char boundary;
+  public:
+    void renderIndicator(float _x, float _y, const std::vector<float>& _camera) override;
 
-public:
-  // 0: left 1: top 2: right 3: bottom
-  PopUp(unsigned char _direction,
-        const std::string &_title,
-        const std::vector<std::string> &_options,
-        unsigned char &_value);  //pop up.
+  public:
+    void render(const std::vector<float>& _camera) override;
+  };
 
-public:
-  void selectNext();
-  void selectPreview();
-  bool select(unsigned char _index);
+  class PopUp : public Widget
+  {
+  public:
+    [[nodiscard]] std::string getType() const override { return "PopUp"; }
 
-public:
-  void init() override;
-  void deInit() override;
+  public:
+    typedef struct Position
+    {
+      float x, xTrg;
+      float y, yTrg;
+    } Position;
 
-public:
-  void onLeft() override;
-  void onRight() override;
-  void onConfirm() override;
-  void onCancel() override;
+    Position position{};
 
-public:
-  void renderIndicator(float _x, float _y, const std::vector<float> &_camera) override;
+  private:
+    std::string title;
+    std::vector<std::string> options;
+    unsigned char direction;
+    unsigned char boundary;
 
-public:
-  void render(const std::vector<float> &_camera) override;
-};
+  public:
+    // 0: left 1: top 2: right 3: bottom
+    PopUp(unsigned char _direction,
+          const std::string& _title,
+          const std::vector<std::string>& _options,
+          unsigned char& _value); //pop up.
 
-class Slider : public Widget {
-public:
-  [[nodiscard]] std::string getType() const override { return "Slider"; }
+  public:
+    void selectNext();
+    void selectPreview();
+    bool select(unsigned char _index);
 
-public:
-  typedef struct Position {
-    float x, xTrg;
-    float y, yTrg;
+  public:
+    void init() override;
+    void deInit() override;
 
-    float l, lTrg; //slider
-  } Position;
+  public:
+    void onLeft() override;
+    void onRight() override;
+    void onConfirm() override;
+    void onCancel() override;
 
-  Position position{};
+  public:
+    void renderIndicator(float _x, float _y, const std::vector<float>& _camera) override;
 
-private:
-  std::string title;
-  unsigned char maxLength;
-  unsigned char min;
-  unsigned char max;
-  unsigned char step;
+  public:
+    void render(const std::vector<float>& _camera) override;
+  };
 
-  bool valueOverflow;
+  class Slider : public Widget
+  {
+  public:
+    [[nodiscard]] std::string getType() const override { return "Slider"; }
 
-  unsigned char lengthIndicator;
+  public:
+    typedef struct Position
+    {
+      float x, xTrg;
+      float y, yTrg;
 
-public:
-  Slider(const std::string &_title,
-         unsigned char _min,
-         unsigned char _max,
-         unsigned char _step,
-         unsigned char &_value);  //slider.
+      float l, lTrg; //slider
+    } Position;
 
-public:
-  unsigned char add();
-  unsigned char sub();
+    Position position{};
 
-public:
-  void init() override;
-  void deInit() override;
+  private:
+    std::string title;
+    unsigned char maxLength;
+    unsigned char min;
+    unsigned char max;
+    unsigned char step;
 
-public:
-  void onLeft() override;
-  void onRight() override;
-  void onConfirm() override;
-  void onCancel() override;
+    bool valueOverflow;
 
-public:
-  void renderIndicator(float _x, float _y, const std::vector<float> &_camera) override;
+    unsigned char lengthIndicator;
 
-public:
-  void render(const std::vector<float> &_camera) override;
-};
+  public:
+    Slider(const std::string& _title,
+           unsigned char _min,
+           unsigned char _max,
+           unsigned char _step,
+           unsigned char& _value); //slider.
+
+  public:
+    unsigned char add();
+    unsigned char sub();
+
+  public:
+    void init() override;
+    void deInit() override;
+
+  public:
+    void onLeft() override;
+    void onRight() override;
+    void onConfirm() override;
+    void onCancel() override;
+
+  public:
+    void renderIndicator(float _x, float _y, const std::vector<float>& _camera) override;
+
+  public:
+    void render(const std::vector<float>& _camera) override;
+  };
 }
 
 #endif //ASTRA_WIDGET__H
