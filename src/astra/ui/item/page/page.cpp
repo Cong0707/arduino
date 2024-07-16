@@ -39,12 +39,14 @@ namespace cong
     {
         if (selected != 0) selected -= 1;
         else selected = wifis.size() - 1;
+        clearInfo();
     }
 
     void Wifi::onRight()
     {
         if (selected != wifis.size() - 1) selected += 1;
         else selected = 0;
+        clearInfo();
     }
 
     void Wifi::addInfo(std::string _msg)
@@ -64,7 +66,6 @@ namespace cong
                 addInfo("");
                 addInfo("网络名称: " + std::string(WiFi.SSID().c_str()));
                 addInfo("IP: " + std::string(WiFi.localIP().toString().c_str()));
-                if (WiFi.enableIpV6()) addInfo("IPv6: " + std::string(WiFi.localIPv6().toString().c_str()));
                 addInfo("Mac: " + std::string(WiFi.macAddress().c_str()));
                 addInfo("网关IP: " + std::string(WiFi.gatewayIP().toString().c_str()));
             }

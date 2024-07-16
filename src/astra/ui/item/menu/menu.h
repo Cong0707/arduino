@@ -127,6 +127,15 @@ namespace astra
         void render(const std::vector<float>& _camera) override;
     };
 
+    class Divider : public Menu
+    {
+    public:
+        [[nodiscard]] std::string getType() const override { return "Divider"; }
+
+    public:
+        Divider(const std::string& _title);
+    };
+
     class Tile : public Menu
     {
     public:

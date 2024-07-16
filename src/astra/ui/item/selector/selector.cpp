@@ -156,7 +156,9 @@ namespace astra
             //draw select box.
             //受摄像机的影响
             HAL::setDrawType(2);
-            HAL::drawRBox(x + _camera[0], y + _camera[1], w, h - 1, astraConfig.selectorRadius);
+            HAL::drawRBox(x + _camera[0],
+                          y + _camera[1] + astraConfig.listTextMargin - astraConfig.selectorTopMargin * 2, w, h - 1,
+                          astraConfig.selectorRadius);
             //HAL::drawRBox(x, y, w, astraConfig.listLineHeight, astraConfig.selectorRadius);
             HAL::setDrawType(1);
         }

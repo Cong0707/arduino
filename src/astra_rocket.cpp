@@ -80,6 +80,7 @@ void astraCoreInit()
 
     astra::Menu* secondPage = new astra::List("设置", settings);
     rootPage->addItem(secondPage);
+    secondPage->addItem(new astra::Divider("网络设置"));
     secondPage->addItem(new cong::Wifi("Wifi", tuning));
 
     astraLauncher->init(rootPage);

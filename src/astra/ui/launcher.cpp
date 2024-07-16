@@ -86,8 +86,8 @@ namespace astra
             popInfo("unreferenced page!", 300);
             return false;
         }
-        if (currentMenu->getNextMenu()->getType() == "Page") {
-
+        if (currentMenu->getNextMenu()->getType() == "Page")
+        {
             currentMenu->rememberCameraPos(camera->getPositionTrg());
 
             currentMenu->deInit(); //先析构（退场动画）再挪动指针
@@ -101,7 +101,13 @@ namespace astra
             selector->inject(currentMenu);
 
             return true;
-        } else {
+        }
+        else if (currentMenu->getNextMenu()->getType() == "Divider")
+        {
+            return false;
+        }
+        else
+        {
             if (currentMenu->getNextMenu()->getItemNum() <= 0)
             {
                 popInfo("empty page!", 300);
@@ -159,7 +165,7 @@ namespace astra
         HAL::canvasClear();
 
         currentMenu->render(camera->getPosition());
-        if (currentMenu->getType() == "Widget") static_cast<Widget*>(currentMenu)->render(camera->getPosition());
+        if (currentMenu->getType() == "Widget") currentMenu->render(camera->getPosition());
         selector->render(camera->getPosition());
         camera->update(currentMenu, selector);
 

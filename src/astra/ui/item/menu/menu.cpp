@@ -54,6 +54,7 @@ namespace astra
     bool Menu::addItem(Menu* _page)
     {
         if (_page == nullptr) return false; //判null
+        if (this->getType() == "Tile" && _page->getType() == "Divider") return false;
 
         _page->parent = this; //使子页面的父页面为自己
         this->childMenu.push_back(_page); //更新自己的子页面列表
@@ -68,8 +69,16 @@ namespace astra
 
         for (auto _iter : childMenu)
         {
-            _iter->position.x = astraConfig.listTextMargin;
-            _iter->position.xTrg = astraConfig.listTextMargin;
+            if (_iter->getType() == "Divider")
+            {
+                _iter->position.x = astraConfig.listTextMargin;
+                _iter->position.xTrg = astraConfig.listTextMargin;
+            }
+            else
+            {
+                _iter->position.x = astraConfig.listTextMargin + 10;
+                _iter->position.xTrg = astraConfig.listTextMargin + 10;
+            }
             _iter->position.yTrg = _index * astraConfig.listLineHeight;
 
             _index++;
@@ -204,7 +213,8 @@ namespace astra
                 astraConfig.listBarWeight,
                 height
             );
-        } else
+        }
+        else
         {
             //draw bar.
             HAL::drawBox(positionForeground.xBar, 0, astraConfig.listBarWeight, positionForeground.hBar);
@@ -220,6 +230,11 @@ namespace astra
 
         Animation::move(&positionForeground.hBar, positionForeground.hBarTrg, astraConfig.listAnimationSpeed);
         Animation::move(&positionForeground.xBar, positionForeground.xBarTrg, astraConfig.listAnimationSpeed);
+    }
+
+    Divider::Divider(const std::string& _title)
+    {
+        title = _title;
     }
 
     void Tile::childPosInit(const std::vector<float>& _camera)
@@ -357,7 +372,8 @@ namespace astra
                 width,
                 astraConfig.tileBarHeight
             );
-        } else
+        }
+        else
         {
             HAL::drawBox(0, positionForeground.yBar, positionForeground.wBar, astraConfig.tileBarHeight);
         }
