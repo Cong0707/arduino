@@ -160,6 +160,10 @@ namespace astra
             //HAL::drawRBox(x, y, w, astraConfig.listLineHeight, astraConfig.selectorRadius);
             HAL::setDrawType(1);
         }
+        else if (menu->getType() == "Page")
+        {
+            HAL::drawBox(0, 0, sys::getSystemConfig().screenWeight, sys::getSystemConfig().screenHeight);
+        }
     }
 
     std::vector<float> Selector::getPosition()

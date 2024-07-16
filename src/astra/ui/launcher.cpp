@@ -86,23 +86,40 @@ namespace astra
             popInfo("unreferenced page!", 300);
             return false;
         }
-        if (currentMenu->getNextMenu()->getItemNum() <= 1)
-        {
-            popInfo("empty page!", 300);
-            return false;
+        if (currentMenu->getNextMenu()->getType() == "Page") {
+
+            currentMenu->rememberCameraPos(camera->getPositionTrg());
+
+            currentMenu->deInit(); //先析构（退场动画）再挪动指针
+
+            currentMenu = currentMenu->getNextMenu();
+
+            static_cast<Page*>(currentMenu)->init();
+
+            currentMenu->render(camera->getPosition());
+
+            selector->inject(currentMenu);
+
+            return true;
+        } else {
+            if (currentMenu->getNextMenu()->getItemNum() <= 1)
+            {
+                popInfo("empty page!", 300);
+                return false;
+            }
+
+            currentMenu->rememberCameraPos(camera->getPositionTrg());
+
+            currentMenu->deInit(); //先析构（退场动画）再挪动指针
+
+            currentMenu = currentMenu->getNextMenu();
+            currentMenu->forePosInit();
+            currentMenu->childPosInit(camera->getPosition());
+
+            selector->inject(currentMenu);
+
+            return true;
         }
-
-        currentMenu->rememberCameraPos(camera->getPositionTrg());
-
-        currentMenu->deInit(); //先析构（退场动画）再挪动指针
-
-        currentMenu = currentMenu->getNextMenu();
-        currentMenu->forePosInit();
-        currentMenu->childPosInit(camera->getPosition());
-
-        selector->inject(currentMenu);
-
-        return true;
     }
 
     /**
@@ -142,7 +159,7 @@ namespace astra
         HAL::canvasClear();
 
         currentMenu->render(camera->getPosition());
-        if (currentWidget != nullptr) currentWidget->render(camera->getPosition());
+        if (currentMenu->getType() == "Widget") static_cast<Widget*>(currentMenu)->render(camera->getPosition());
         selector->render(camera->getPosition());
         camera->update(currentMenu, selector);
 
@@ -177,20 +194,28 @@ namespace astra
         //if (time >= 700) time = 0; //test
 
         HAL::startKeyScan();
-        if (currentWidget == nullptr)
+        if (currentMenu->getType() == "Widget")
+        {
+            if (HAL::isLeft()) static_cast<Widget*>(currentMenu)->onLeft();
+            else if (HAL::isRight()) static_cast<Widget*>(currentMenu)->onRight();
+            else if (HAL::isConfirm()) static_cast<Widget*>(currentMenu)->onConfirm();
+            else if (HAL::isCancel()) close();
+        }
+        else if (currentMenu->getType() == "Page")
+        {
+            if (HAL::isLeft()) static_cast<Page*>(currentMenu)->onLeft();
+            else if (HAL::isRight()) static_cast<Page*>(currentMenu)->onRight();
+            else if (HAL::isConfirm()) static_cast<Page*>(currentMenu)->onConfirm();
+            else if (HAL::isCancel()) close();
+        }
+        else
         {
             if (HAL::isLeft()) selector->goPreview();
             else if (HAL::isRight()) selector->goNext();
             else if (HAL::isConfirm()) open();
             else if (HAL::isCancel()) close();
         }
-        else
-        {
-            if (HAL::isLeft()) currentWidget->onLeft();
-            else if (HAL::isRight()) currentWidget->onRight();
-            else if (HAL::isConfirm()) currentWidget->onConfirm();
-            else if (HAL::isCancel()) close();
-        }
+
 
         HAL::canvasUpdate();
 

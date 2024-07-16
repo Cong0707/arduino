@@ -15,7 +15,6 @@ namespace astra
     {
     private:
         Menu* currentMenu;
-        Widget* currentWidget = nullptr;
         Selector* selector;
         Camera* camera;
 

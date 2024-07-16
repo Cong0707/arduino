@@ -6,6 +6,7 @@
 #include "astra_rocket.h"
 
 #include <iomanip>
+#include <astra/ui/item/page/page.h>
 #include <astra/ui/item/widget/widget.h>
 
 #include "astra/astra_logo.h"
@@ -73,14 +74,13 @@ void astraCoreInit()
 
     astra::Menu* rootPage = new astra::Tile("主菜单");
 
+    rootPage->addItem(new cong::Wifi("Wifi连接", tuning));
     rootPage->addItem(new astra::List("test1", moon));
     rootPage->addItem(new astra::List("测试2", tuning));
     rootPage->addItem(new astra::List("测试测试3", sci));
 
     astra::Menu* secondPage = new astra::List("secondPage", settings);
     rootPage->addItem(secondPage);
-
-    secondPage->addItem(new astra::List());
 
     bool test = false;
     unsigned char testIndex = 0;

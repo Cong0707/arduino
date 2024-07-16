@@ -190,6 +190,10 @@ namespace astra
     public:
         Page() = default;
 
+    public:
+        virtual void init() {};
+        virtual void deInit() {};
+
     public: // 处理用户输入
         virtual void onLeft() {};
         virtual void onRight() {};

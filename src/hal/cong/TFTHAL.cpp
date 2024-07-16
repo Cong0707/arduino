@@ -1,5 +1,8 @@
 #include "TFTHAL.h"
 
+#include <lwip/sockets.h>
+#include <WiFi.h>
+
 // 实现屏幕开启和关闭
 void TFTHAL::_screenOn() {
     tft_espi.fillScreen(TFT_BLACK);

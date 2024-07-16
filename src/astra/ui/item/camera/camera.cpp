@@ -176,6 +176,7 @@ namespace astra
         //if (this->isReached(_menu->getCameraMemoryPos())) _menu->cameraPosMemoryFlag = false;
         if (_menu->getType() == "List") goToListItemRolling(reinterpret_cast<List*>(_menu));
         else if (_menu->getType() == "Tile") goToTileItem(_menu->selectIndex);
+        else if (_menu->getType() == "Page") go(0, 0);
 
         this->render();
     }
