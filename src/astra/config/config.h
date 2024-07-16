@@ -236,7 +236,7 @@ namespace astra
 
         const unsigned char* logoTitleFont = u8g2_font_Cascadia;
         const unsigned char* logoCopyRightFont = u8g2_font_myfont;
-        const unsigned char* mainFont = u8g2_font_myfont;
+        const unsigned char* mainFont = u8g2_font_wqy12_t_gb2312;
 
         //如果未使用u8g2库 请自行修改这里
         //const unsigned char *logoTitleFont = u8g2_font_Cascadia;

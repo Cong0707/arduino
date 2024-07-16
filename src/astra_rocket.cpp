@@ -74,26 +74,13 @@ void astraCoreInit()
 
     astra::Menu* rootPage = new astra::Tile("主菜单");
 
-    rootPage->addItem(new cong::Wifi("Wifi连接", tuning));
     rootPage->addItem(new astra::List("test1", moon));
     rootPage->addItem(new astra::List("测试2", tuning));
     rootPage->addItem(new astra::List("测试测试3", sci));
 
-    astra::Menu* secondPage = new astra::List("secondPage", settings);
+    astra::Menu* secondPage = new astra::List("设置", settings);
     rootPage->addItem(secondPage);
-
-    bool test = false;
-    unsigned char testIndex = 0;
-    unsigned char testSlider = 60;
-    secondPage->addItem(new astra::CheckBox("-测试2", test));
-    secondPage->addItem(new astra::PopUp("-测试测试3", "测试", 1, {"测试"}, testIndex));
-    secondPage->addItem(new astra::Slider("-测试测试测试4","测试", 0, 100, 50, testSlider));
-
-    secondPage->addItem(new astra::Tile("-测试测试测试6"));
-    secondPage->addItem(new astra::List("-测试测试测试6"));
-    secondPage->addItem(new astra::List("-测试测试测试6"));
-    secondPage->addItem(new astra::List("-测试测试测试6"));
-    secondPage->addItem(new astra::List("-测试测试测试6"));
+    secondPage->addItem(new cong::Wifi("Wifi", tuning));
 
     astraLauncher->init(rootPage);
 }

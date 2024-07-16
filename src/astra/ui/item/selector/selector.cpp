@@ -162,7 +162,7 @@ namespace astra
         }
         else if (menu->getType() == "Page")
         {
-            HAL::drawBox(0, 0, sys::getSystemConfig().screenWeight, sys::getSystemConfig().screenHeight);
+            //HAL::drawBox(0, 0, sys::getSystemConfig().screenWeight, sys::getSystemConfig().screenHeight);
         }
     }
 

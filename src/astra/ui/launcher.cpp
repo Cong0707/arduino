@@ -102,7 +102,7 @@ namespace astra
 
             return true;
         } else {
-            if (currentMenu->getNextMenu()->getItemNum() <= 1)
+            if (currentMenu->getNextMenu()->getItemNum() <= 0)
             {
                 popInfo("empty page!", 300);
                 return false;
@@ -135,7 +135,7 @@ namespace astra
             popInfo("unreferenced page!", 300);
             return false;
         }
-        if (currentMenu->getPreview()->getItemNum() <= 1)
+        if (currentMenu->getPreview()->getItemNum() <= 0)
         {
             popInfo("empty page!", 300);
             return false;

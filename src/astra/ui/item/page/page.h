@@ -16,10 +16,9 @@ namespace cong
         };
 
     private:
-        std::string message;
-        std::string wifiSelectedMessage;
+        std::vector<std::string> infoCache = {};
         std::vector<wifi> wifis = {
-            {"Xiaomi_9047", "13807858062ljg"}
+            {"exampleWifi", "examplePassWord"}
         };
         int selected = 0;
 
@@ -42,6 +41,8 @@ namespace cong
         void onConfirm() override;
 
     public:
+        void addInfo(std::string _msg);
+        void clearInfo();
         void render(const std::vector<float>& _camera) override;
     };
 }
