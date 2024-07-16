@@ -55,6 +55,7 @@ namespace astra
     {
         if (_page == nullptr) return false; //判null
         if (this->getType() == "Tile" && _page->getType() == "Divider") return false;
+        if (this->getType() == "Widget") return false;
 
         _page->parent = this; //使子页面的父页面为自己
         this->childMenu.push_back(_page); //更新自己的子页面列表
