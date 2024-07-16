@@ -14,6 +14,7 @@ namespace cong
     void Wifi::init()
     {
         clearInfo();
+        WiFi.mode(WIFI_MODE_APSTA);
     }
 
     void Wifi::deInit() {}
@@ -25,12 +26,6 @@ namespace cong
         {
             addInfo("正在连接");
             ::WiFi.begin(wifis[selected].SSID.c_str(), wifis[selected].password.c_str());
-            addInfo(".");
-            while(!WiFi.isConnected())
-            {
-                delay(500);
-                infoCache[infoCache.size() - 1] = infoCache[infoCache.size() - 1] + ".";
-            }
             clearInfo();
         }
     }
@@ -85,4 +80,65 @@ namespace cong
         }
         HAL::canvasUpdate();
     }
+
+    AP::AP(const std::string& _title, const std::vector<unsigned char>& _pic)
+    {
+        title = _title;
+        pic = _pic;
+    }
+
+    void AP::init()
+    {
+        clearInfo();
+        WiFi.mode(WIFI_MODE_APSTA);
+    }
+
+    void AP::deInit() {}
+
+    void AP::onConfirm()
+    {
+        clearInfo();
+        addInfo("热点正在开启");
+        WiFi.softAP(SSID.c_str(), password.c_str());
+        enabled = true;
+        clearInfo();
+    }
+
+    void AP::onLeft() {}
+
+    void AP::onRight() {}
+
+    void AP::addInfo(std::string _msg)
+    {
+        infoCache.push_back(_msg);
+    }
+
+    void AP::clearInfo() { infoCache.clear(); }
+
+    void AP::render(const std::vector<float>& _camera)
+    {
+        if ( infoCache.empty() )
+        {
+            if (enabled)
+            {
+                addInfo("热点已开启");
+                addInfo("");
+                addInfo("网络名称: " + std::string(WiFi.softAPSSID().c_str()));
+                addInfo("网络密码: " + std::string(password));
+                addInfo("网关IP: " + std::string(WiFi.softAPNetworkID().toString().c_str()));
+            }
+            else
+            {
+                addInfo("热点已关闭");
+            }
+        }
+        static const unsigned char _fontHeight = HAL::getFontHeight();
+        HAL::canvasClear();
+        for (unsigned char i = 0; i < infoCache.size(); i++)
+        {
+            HAL::drawChinese(0, _fontHeight + i * (5 + _fontHeight) + 10, infoCache[i]);
+        }
+        HAL::canvasUpdate();
+    }
+
 }

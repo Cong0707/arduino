@@ -45,6 +45,38 @@ namespace cong
         void clearInfo();
         void render(const std::vector<float>& _camera) override;
     };
+
+    class AP : public astra::Page
+    {
+    private:
+        std::vector<std::string> infoCache = {};
+        std::string SSID = "ESP32S3-cong";
+        std::string password = "12345678";
+        bool enabled = false;
+
+    public:
+        AP(); //check box.
+        AP(const std::string& _title, const std::vector<unsigned char>& _pic);
+
+    public:
+        bool check();
+        bool uncheck();
+        bool toggle();
+
+    public:
+        void init() override;
+        void deInit() override;
+
+    public:
+        void onLeft() override;
+        void onRight() override;
+        void onConfirm() override;
+
+    public:
+        void addInfo(std::string _msg);
+        void clearInfo();
+        void render(const std::vector<float>& _camera) override;
+    };
 }
 
 #endif //ASTRA_PAGE__H

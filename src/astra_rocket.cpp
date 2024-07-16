@@ -82,6 +82,7 @@ void astraCoreInit()
     rootPage->addItem(secondPage);
     secondPage->addItem(new astra::Divider("网络设置"));
     secondPage->addItem(new cong::Wifi("Wifi", tuning));
+    secondPage->addItem(new cong::AP("个人热点", tuning));
 
     astraLauncher->init(rootPage);
 }
