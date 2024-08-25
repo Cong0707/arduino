@@ -13,8 +13,6 @@
 
 namespace astra
 {
-    class Widget;
-
     class Menu : public Item
     {
     public:
@@ -80,8 +78,8 @@ namespace astra
         ~Menu() = default;
 
     public:
-        void init(const std::vector<float>& _camera); //每次打开页面都要调用一次
-        void deInit(); //每次关闭页面都要调用一次
+        virtual void init(const std::vector<float>& _camera); //每次打开页面都要调用一次
+        virtual void deInit(); //每次关闭页面都要调用一次
 
     public:
         virtual void render(const std::vector<float>& _camera)
@@ -177,10 +175,6 @@ namespace astra
     public:
         Widget() = default;
 
-    public:
-        virtual void init() {};
-        virtual void deInit() {};
-
     public: // 处理用户输入
         virtual void onLeft() {};
         virtual void onRight() {};
@@ -198,10 +192,6 @@ namespace astra
 
     public:
         Page() = default;
-
-    public:
-        virtual void init() {};
-        virtual void deInit() {};
 
     public: // 处理用户输入
         virtual void onLeft() {};

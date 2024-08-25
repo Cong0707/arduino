@@ -47,8 +47,6 @@ namespace astra
 
             Animation::move(&yPop, yPopTrg, getUIConfig().popSpeed); //动画
 
-            //这里条件可以加上一个如果按键按下 就滑出 DONE
-            HAL::startKeyScan();
             if (time - beginTime >= _time) yPopTrg = 0 - hPop - 8; //滑出
 
             if (yPop == 0 - hPop - 8)
@@ -64,7 +62,7 @@ namespace astra
         currentMenu = _rootPage;
 
         camera = new Camera(0, 0);
-        _rootPage->childPosInit(camera->getPosition());
+        _rootPage->init(camera->getPosition());
 
         selector = new Selector();
         selector->inject(_rootPage);
@@ -86,41 +84,29 @@ namespace astra
             popInfo("unreferenced page!", 300);
             return false;
         }
-        if (currentMenu->getNextMenu()->getType() == "Page")
-        {
-            currentMenu->rememberCameraPos(camera->getPositionTrg());
-
-            currentMenu->deInit(); //先析构（退场动画）再挪动指针
-
-            currentMenu = currentMenu->getNextMenu();
-
-            static_cast<Page*>(currentMenu)->init();
-
-            currentMenu->render(camera->getPosition());
-
-            selector->inject(currentMenu);
-
-            return true;
-        }
         else if (currentMenu->getNextMenu()->getType() == "Divider")
         {
             return false;
         }
         else
         {
-            if (currentMenu->getNextMenu()->getItemNum() <= 0)
+            /*
+            if (currentMenu->getNextMenu()->getType() != "Page")
             {
-                popInfo("empty page!", 300);
-                return false;
+                if (currentMenu->getNextMenu()->getItemNum() <= 0)
+                {
+                    popInfo("empty page!", 300);
+                    return false;
+                }
             }
+            */
 
             currentMenu->rememberCameraPos(camera->getPositionTrg());
 
             currentMenu->deInit(); //先析构（退场动画）再挪动指针
 
             currentMenu = currentMenu->getNextMenu();
-            currentMenu->forePosInit();
-            currentMenu->childPosInit(camera->getPosition());
+            currentMenu->init(camera->getPosition());
 
             selector->inject(currentMenu);
 
@@ -152,8 +138,7 @@ namespace astra
         currentMenu->deInit(); //先析构（退场动画）再挪动指针
 
         currentMenu = currentMenu->getPreview();
-        currentMenu->forePosInit();
-        currentMenu->childPosInit(camera->getPosition());
+        currentMenu->init(camera->getPosition());
 
         selector->inject(currentMenu);
 
@@ -199,7 +184,6 @@ namespace astra
 
         //if (time >= 700) time = 0; //test
 
-        HAL::startKeyScan();
         if (currentMenu->getType() == "Widget")
         {
             if (HAL::isLeft()) static_cast<Widget*>(currentMenu)->onLeft();

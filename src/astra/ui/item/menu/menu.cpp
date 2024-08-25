@@ -43,6 +43,8 @@ namespace astra
 
     void Menu::init(const std::vector<float>& _camera)
     {
+        forePosInit();
+        childPosInit(_camera);
     }
 
     void Menu::deInit()

@@ -25,7 +25,7 @@ namespace astra
         bool toggle();
 
     public:
-        void init() override;
+        void init(const std::vector<float>& _camera) override;
         void deInit() override;
 
     public:
@@ -71,7 +71,7 @@ namespace astra
         bool select(unsigned char _index);
 
     public:
-        void init() override;
+        void init(const std::vector<float>& _camera) override;
         void deInit() override;
 
     public:
@@ -123,7 +123,7 @@ namespace astra
         unsigned char sub();
 
     public:
-        void init() override;
+        void init(const std::vector<float>& _camera) override;
         void deInit() override;
 
     public:

@@ -18,7 +18,7 @@ namespace cong
     private:
         std::vector<std::string> infoCache = {};
         std::vector<wifi> wifis = {
-            {"exampleWifi", "examplePassWord"}
+            {"NN14Z-WIFI", "14145678"},
         };
         int selected = 0;
 
@@ -27,12 +27,7 @@ namespace cong
         Wifi(const std::string& _title, const std::vector<unsigned char>& _pic);
 
     public:
-        bool check();
-        bool uncheck();
-        bool toggle();
-
-    public:
-        void init() override;
+        void init(const std::vector<float>& _camera) override;
         void deInit() override;
 
     public:
@@ -59,12 +54,7 @@ namespace cong
         AP(const std::string& _title, const std::vector<unsigned char>& _pic);
 
     public:
-        bool check();
-        bool uncheck();
-        bool toggle();
-
-    public:
-        void init() override;
+        void init(const std::vector<float>& _camera) override;
         void deInit() override;
 
     public:
@@ -73,8 +63,41 @@ namespace cong
         void onConfirm() override;
 
     public:
-        void addInfo(std::string _msg);
-        void clearInfo();
+        void addInfo(std::string _msg) { infoCache.push_back(_msg); };
+        void clearInfo() { infoCache.clear(); };
+        void render(const std::vector<float>& _camera) override;
+    };
+
+    class FileList : public astra::List
+    {
+    private:
+        std::string path;
+        bool initialized = false;
+
+    public:
+        FileList(const std::string& _title, const std::string& _path);
+
+    public:
+        void init(const std::vector<float>& _camera) override;
+        void deInit() override;
+    };
+
+    class TxtPage : public astra::Page
+    {
+    public:
+        TxtPage(); //check box.
+        TxtPage(const std::string& _title, const std::vector<unsigned char>& _pic);
+
+    public:
+        void init(const std::vector<float>& _camera) override;
+        void deInit() override;
+
+    public:
+        void onLeft() override;
+        void onRight() override;
+        void onConfirm() override;
+
+    public:
         void render(const std::vector<float>& _camera) override;
     };
 }

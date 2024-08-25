@@ -1,5 +1,7 @@
 #include "page.h"
 
+#include <SD.h>
+#include <SD_MMC.h>
 #include <vector>
 #include <WiFi.h>
 
@@ -11,7 +13,7 @@ namespace cong
         pic = _pic;
     }
 
-    void Wifi::init()
+    void Wifi::init(const std::vector<float>& _camera)
     {
         clearInfo();
         WiFi.mode(WIFI_MODE_APSTA);
@@ -87,7 +89,7 @@ namespace cong
         pic = _pic;
     }
 
-    void AP::init()
+    void AP::init(const std::vector<float>& _camera)
     {
         clearInfo();
         WiFi.mode(WIFI_MODE_APSTA);
@@ -107,13 +109,6 @@ namespace cong
     void AP::onLeft() {}
 
     void AP::onRight() {}
-
-    void AP::addInfo(std::string _msg)
-    {
-        infoCache.push_back(_msg);
-    }
-
-    void AP::clearInfo() { infoCache.clear(); }
 
     void AP::render(const std::vector<float>& _camera)
     {
@@ -140,5 +135,50 @@ namespace cong
         }
         HAL::canvasUpdate();
     }
+
+    FileList::FileList(const std::string& _title, const std::string& _path)
+    {
+        title = _title;
+        pic = {
+            0xFF, 0xFF, 0xFF, 0x3F, 0xFF, 0xFF, 0xFF, 0x3F, 0xFF, 0xFF, 0xFF, 0x3F, 0xFF, 0xF9, 0xE7, 0x3F,
+            0xFF, 0xF9, 0xE7, 0x3F, 0xFF, 0xF9, 0xE7, 0x3F, 0xFF, 0xF0, 0xE7, 0x3F, 0x7F, 0xE0, 0xE7, 0x3F,
+            0x7F, 0xE0, 0xC3, 0x3F, 0x7F, 0xE0, 0xC3, 0x3F, 0x7F, 0xE0, 0xC3, 0x3F, 0x7F, 0xE0, 0xE7, 0x3F,
+            0xFF, 0xF0, 0xE7, 0x3F, 0xFF, 0xF9, 0xE7, 0x3F, 0xFF, 0xF9, 0xE7, 0x3F, 0xFF, 0xF9, 0xE7, 0x3F,
+            0xFF, 0xF9, 0xE7, 0x3F, 0xFF, 0xF9, 0xC3, 0x3F, 0xFF, 0xF9, 0x81, 0x3F, 0xFF, 0xF0, 0x81, 0x3F,
+            0xFF, 0xF0, 0x81, 0x3F, 0xFF, 0xF0, 0x81, 0x3F, 0xFF, 0xF9, 0x81, 0x3F, 0xFF, 0xF9, 0xC3, 0x3F,
+            0xFF, 0xF9, 0xE7, 0x3F, 0xFF, 0xF9, 0xE7, 0x3F, 0xFF, 0xF9, 0xE7, 0x3F, 0xFF, 0xFF, 0xFF, 0x3F,
+            0xFF, 0xFF, 0xFF, 0x3F, 0xFF, 0xFF, 0xFF, 0x3F
+        };//TODO
+        path = _path;
+    }
+
+    void FileList::init(const std::vector<float>& _camera)
+    {
+        pinMode(GPIO_NUM_38, PULLDOWN);
+        SD_MMC.setPins(GPIO_NUM_40, GPIO_NUM_39, GPIO_NUM_41);
+
+        SD_MMC.begin("/sdcard", true);
+
+        if (!initialized)
+        {
+            File root = SD_MMC.open(path.c_str());
+
+            File file = root.openNextFile();
+            while (file) {
+                if (file.isDirectory()) {
+                    addItem(new FileList(file.name(), file.path()));
+                } else {
+                    addItem(new List(file.name()));
+                }
+                file = root.openNextFile();
+            }
+            initialized = true;
+        }
+
+        forePosInit();
+        childPosInit(_camera);
+    }
+
+    void FileList::deInit() {}
 
 }

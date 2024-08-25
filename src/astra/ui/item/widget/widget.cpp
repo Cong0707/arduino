@@ -40,7 +40,7 @@ namespace astra
         return isCheck;
     }
 
-    void CheckBox::init()
+    void CheckBox::init(const std::vector<float>& _camera)
     {
         if (value) isCheck = true;
         else isCheck = false;
@@ -114,7 +114,7 @@ namespace astra
         return true;
     }
 
-    void PopUp::init()
+    void PopUp::init(const std::vector<float>& _camera)
     {
     }
 
@@ -175,7 +175,7 @@ namespace astra
         return this->value;
     }
 
-    void Slider::init()
+    void Slider::init(const std::vector<float>& _camera)
     {
         maxLength = std::floor(HAL::getSystemConfig().screenWeight * 0.6);
         position.lTrg = std::floor(((float)(value - min) / (max - min)) * maxLength); //计算目标长度

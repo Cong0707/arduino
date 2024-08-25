@@ -63,19 +63,19 @@ void astraCoreInit()
     HAL::inject(new TFTHAL);
 
     HAL::screenOn();
-    HAL::setSelectFont(1);
+    HAL::setFont(astra::getUIConfig().mainFont);
 
     HAL::printInfo("tft_espi_init()");
     HAL::delay(100);
     HAL::printInfo("loading...");
     HAL::delay(50);
 
-    astra::drawLogo(200);
+    //astra::drawLogo(200);
 
     astra::Menu* rootPage = new astra::Tile("主菜单");
 
-    rootPage->addItem(new astra::List("test1", moon));
-    rootPage->addItem(new astra::List("测试2", tuning));
+    rootPage->addItem(new cong::FileList("文件", "/"));
+    rootPage->addItem(new astra::List("测试2", moon));
     rootPage->addItem(new astra::List("测试测试3", sci));
 
     astra::Menu* secondPage = new astra::List("设置", settings);
@@ -85,6 +85,20 @@ void astraCoreInit()
     secondPage->addItem(new cong::AP("个人热点", tuning));
 
     astraLauncher->init(rootPage);
+
+    xTaskCreate(
+        [](void*) {
+            for (;;) {
+                HAL::startKeyScan();  // 执行按键扫描
+                vTaskDelay(10 / portTICK_PERIOD_MS);  // 延迟10毫秒，避免占用过多CPU资源
+            }
+        },
+        "KeyScanTask",  // 任务名称
+        2048,           // 任务栈大小（字节）
+        NULL,           // 传递给任务的参数
+        1,              // 任务优先级
+        NULL            // 任务句柄
+    );
 }
 
 void astraCoreUpdate()

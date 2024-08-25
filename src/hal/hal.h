@@ -29,8 +29,8 @@ namespace sys
 {
     struct config
     {
-        unsigned char screenWeight = 128;
-        unsigned char screenHeight = 160;
+        int screenWeight = 240;
+        int screenHeight = 320;
         float screenBright = 255;
     };
 

@@ -1,6 +1,11 @@
+//hal define
 #include "../hal.h"
+//tft
 #include "u8g2_for_tft_espi/U8g2_for_TFT_eSPI.h"
 #include <TFT_eSPI.h>
+//button
+#include <ESPRotary.h>
+#include <Button2.h>
 
 class TFTHAL : public HAL {
 protected:
@@ -8,13 +13,12 @@ protected:
     TFT_eSprite sprite = TFT_eSprite(&tft_espi);
     U8g2_for_TFT_eSPI u8g2;
     bool useU8g2 = false;
+
+    ESPRotary rotary;
+    Button2 button;
 public:
-    void init() override {
-        tft_espi.init();
-        pinMode(GPIO_NUM_10, INPUT_PULLDOWN);
-        pinMode(GPIO_NUM_11, INPUT_PULLDOWN);
-        pinMode(GPIO_NUM_12, INPUT_PULLDOWN);
-    }
+    void init() override;
+
 public:
     void _screenOn() override;
     void _screenOff() override;

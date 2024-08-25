@@ -174,16 +174,16 @@ namespace astra
      */
     struct config
     {
-        float tileAnimationSpeed = 70;
-        float listAnimationSpeed = 70;
-        float selectorYAnimationSpeed = 80;
-        float selectorXAnimationSpeed = 90;
-        float selectorWidthAnimationSpeed = 90;
-        float selectorHeightAnimationSpeed = 75;
-        float windowAnimationSpeed = 25;
-        float sideBarAnimationSpeed = 15;
+        float tileAnimationSpeed = 95;
+        float listAnimationSpeed = 99;
+        float selectorYAnimationSpeed = 97;
+        float selectorXAnimationSpeed = 97;
+        float selectorWidthAnimationSpeed = 95;
+        float selectorHeightAnimationSpeed = 95;
+        float windowAnimationSpeed = 98;
+        float sideBarAnimationSpeed = 90;
         float fadeAnimationSpeed = 100;
-        float cameraAnimationSpeed = 80;
+        float cameraAnimationSpeed = 98;
         float logoAnimationSpeed = 70;
 
         bool tileUnfold = true;

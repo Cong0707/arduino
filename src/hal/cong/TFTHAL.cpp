@@ -3,12 +3,36 @@
 #include <lwip/sockets.h>
 #include <WiFi.h>
 
+bool isLefting = false;
+bool isRighting = false;
+bool isConfirmed = false;
+bool isCanceled = false;
+
+void TFTHAL::init() {
+    tft_espi.init();
+
+    button.begin(GPIO_NUM_17);
+    button.setLongClickTime(400);
+    button.setClickHandler([](Button2&) { isConfirmed = true; });
+    button.setLongClickHandler([](Button2&) { isCanceled = true; });
+
+    rotary.begin(GPIO_NUM_18, GPIO_NUM_16, 4);
+    rotary.setLeftRotationHandler([](ESPRotary&) ->void { isLefting = true; });
+    rotary.setRightRotationHandler([](ESPRotary&) ->void { isRighting = true; });
+
+    Serial.begin(115200);
+}
+
 // 实现屏幕开启和关闭
 void TFTHAL::_screenOn() {
+    pinMode(GPIO_NUM_2, OUTPUT);
+    digitalWrite(GPIO_NUM_2, HIGH);
     tft_espi.fillScreen(TFT_BLACK);
 }
 
 void TFTHAL::_screenOff() {
+    pinMode(GPIO_NUM_2, OUTPUT);
+    digitalWrite(GPIO_NUM_2, LOW);
     tft_espi.fillScreen(TFT_BLACK);
 }
 
@@ -58,7 +82,8 @@ uint8_t TFTHAL::_getFontWidth(std::string& _text) {
 }
 
 uint8_t TFTHAL::_getFontHeight() {
-    return sprite.fontHeight();
+    if (useU8g2) return u8g2.getFontAscent();
+    else return sprite.fontHeight();
 }
 
 void TFTHAL::_setDrawType(uint8_t _type) {
@@ -173,46 +198,9 @@ void TFTHAL::_setBeepVol(uint8_t _vol) {
     // 设置蜂鸣器音量
 }
 
-
-
-unsigned long lastMillis = 0;
-
-bool lastState = false;//上次执行函数的状态
-unsigned long lastTime = 0;//上次改变状态的时间
-unsigned long lastDuration = 0;//上上次改变状态距离上次改变状态的时间
-
-bool isLefting = false;
-bool isRighting = false;
-bool isConfirmed = false;
-bool isCanceled = false;
-
 void TFTHAL::_startKeyScan() {
-    bool nowState = digitalRead(GPIO_NUM_11) == HIGH; //状态 是否按下
-    unsigned long duration = millis() - lastTime; //距离上次改变状态的时间
-    if (nowState != lastState)//如果改变状态
-    {
-        lastTime = millis(); //更新lastTime
-        if (lastDuration >= 300 && duration >= 1000 && !nowState) //现在是松开的状态 且按下持续500 按下之前松开持续300 长按
-        {
-            isCanceled = true;
-        }
-        else if (lastDuration >= 300 && duration <= 700 && !nowState) //现在是松开的状态 且按下小于500 按下之前松开持续300 短按
-        {
-            isConfirmed = true;
-        }
-        else if (lastDuration <= 300 && duration <= 700 && !nowState) //现在是松开的状态 且按下小于500 按下之前松开小于300 双击
-        {
-            //干嘛用呢不知道
-        }
-    }
-    lastState = nowState;
-    lastDuration = duration; //更新lastDuration
-
-    if (millis() - lastMillis >= 200) {
-        lastMillis = millis();
-        if (digitalRead(GPIO_NUM_10) == HIGH) isLefting = true;
-        else if (digitalRead(GPIO_NUM_12) == HIGH) isRighting = true;
-    }
+    button.loop();
+    rotary.loop();
 }
 
 bool TFTHAL::_isLeft() {
