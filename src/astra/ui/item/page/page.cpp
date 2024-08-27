@@ -4,6 +4,8 @@
 #include <SD_MMC.h>
 #include <vector>
 #include <WiFi.h>
+#include <cstring>
+#include <TJpg_Decoder.h>
 
 namespace cong
 {
@@ -55,6 +57,8 @@ namespace cong
 
     void Wifi::render(const std::vector<float>& _camera)
     {
+        HAL::canvasClear();
+
         if ( infoCache.empty() )
         {
             if (WiFi.isConnected())
@@ -112,6 +116,8 @@ namespace cong
 
     void AP::render(const std::vector<float>& _camera)
     {
+        HAL::canvasClear();
+
         if ( infoCache.empty() )
         {
             if (enabled)
@@ -163,13 +169,17 @@ namespace cong
         {
             File root = SD_MMC.open(path.c_str());
 
-            File file = root.openNextFile();
+            File file = root.openNextFile("r");
             while (file) {
                 if (file.isDirectory()) {
                     addItem(new FileList(file.name(), file.path()));
                 } else {
-                    addItem(new List(file.name()));
+                    if (String(file.name()).endsWith(".txt")) addItem(new TxtPage(file));
+                    else if (String(file.name()).endsWith(".jpg")) addItem(new ImagePage(file));
+                    else if (String(file.name()).endsWith(".mp4")) addItem(new VideoPage(file));
+                    else addItem(new List(file.name()));
                 }
+                file.close();
                 file = root.openNextFile();
             }
             initialized = true;
@@ -181,4 +191,123 @@ namespace cong
 
     void FileList::deInit() {}
 
+    TxtPage::TxtPage(const File& file)
+    {
+        title = file.name();
+        filepath = file.path();
+    }
+
+    void TxtPage::init(const std::vector<float>& _camera)
+    {
+        File file = SD_MMC.open(filepath.c_str());
+
+    }
+
+    void TxtPage::onConfirm()
+    {
+
+    }
+
+    void TxtPage::onLeft()
+    {
+
+    }
+
+    void TxtPage::onRight()
+    {
+
+    }
+
+    void TxtPage::render(const std::vector<float>& _camera)
+    {
+
+    }
+
+    void TxtPage::deInit()
+    {
+
+    }
+
+
+    ImagePage::ImagePage(const File& file)
+    {
+        title = file.name();
+        filepath = file.path();
+    }
+
+    void ImagePage::init(const std::vector<float>& _camera)
+    {
+        HAL::canvasClear();
+
+        // The byte order can be swapped (set true for TFT_eSPI)
+        TJpgDec.setSwapBytes(true);
+
+        // The decoder must be given the exact name of the rendering function above
+        TJpgDec.setCallback([](int16_t _x, int16_t _y, uint16_t _w, uint16_t _h, uint16_t* _bitmap) -> bool
+        {
+            if ( _y >= 320 ) return false;//TODO
+            HAL::drawImage(_x, _y, _w, _h, _bitmap);
+            return true;
+        });
+
+        // Get the width and height in pixels of the jpeg if you wish
+        uint16_t w = 0, h = 0, scale = 8;
+        TJpgDec.getFsJpgSize(&w, &h, SD_MMC.open(filepath.c_str())); // Note name preceded with "/"
+
+        while (scale != 0)
+        {
+            scale >>= 1;
+            if (w * scale > systemConfig.screenWeight && h * scale > systemConfig.screenHeight) break;
+        }
+
+        TJpgDec.setJpgScale(scale);
+
+        const uint16_t blackW = ( systemConfig.screenWeight - w ) / 2;
+        const uint16_t blackH = ( systemConfig.screenHeight - h ) / 2;
+
+        TJpgDec.drawSdJpg(blackW, blackH, SD_MMC.open(filepath.c_str()));
+    }
+
+    void ImagePage::render(const std::vector<float>& _camera){}
+    void ImagePage::deInit(){}
+    void ImagePage::onLeft(){}
+    void ImagePage::onRight(){}
+    void ImagePage::onConfirm(){}
+
+
+    VideoPage::VideoPage(File file)
+    {
+        title = file.name();
+        filepath = file.path();
+    }
+
+    void VideoPage::init(const std::vector<float>& _camera)
+    {
+
+    }
+
+    void VideoPage::onConfirm()
+    {
+
+    }
+
+    void VideoPage::onLeft()
+    {
+
+    }
+
+    void VideoPage::onRight()
+    {
+
+    }
+
+    void VideoPage::render(const std::vector<float>& _camera)
+    {
+
+    }
+
+    void VideoPage::deInit()
+    {
+
+    }
 }

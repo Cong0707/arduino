@@ -16,6 +16,13 @@ void TFTHAL::init() {
     button.setClickHandler([](Button2&) { isConfirmed = true; });
     button.setLongClickHandler([](Button2&) { isCanceled = true; });
 
+    esp_sleep_enable_ext0_wakeup(GPIO_NUM_17, 0);  // 0 表示低电平触发唤醒
+    button.setDoubleClickHandler([](Button2&)
+    {
+        delay(150);
+        esp_deep_sleep_start();
+    });//双击沉睡）
+
     rotary.begin(GPIO_NUM_18, GPIO_NUM_16, 4);
     rotary.setLeftRotationHandler([](ESPRotary&) ->void { isLefting = true; });
     rotary.setRightRotationHandler([](ESPRotary&) ->void { isRighting = true; });
@@ -151,6 +158,12 @@ void TFTHAL::_drawXBMP(float _x, float _y, float _w, float _h, const uint8_t* _b
 
     sprite.endWrite();  // 结束写入
 }
+
+void TFTHAL::_drawImage(int16_t _x, int16_t _y, uint16_t _w, uint16_t _h, uint16_t* _bitMap)
+{
+    sprite.pushImage(_x, _y, _w, _h, _bitMap);
+}
+
 
 void TFTHAL::_drawBox(float _x, float _y, float _w, float _h) {
     sprite.drawRect(_x, _y, _w, _h, TFT_WHITE);

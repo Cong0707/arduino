@@ -8,7 +8,7 @@
 #include <Button2.h>
 
 class TFTHAL : public HAL {
-protected:
+public:
     TFT_eSPI tft_espi = TFT_eSPI();
     TFT_eSprite sprite = TFT_eSprite(&tft_espi);
     U8g2_for_TFT_eSPI u8g2;
@@ -42,6 +42,7 @@ public:
     void _drawVLine(float _x, float _y, float _h) override;
     void _drawHLine(float _x, float _y, float _l) override;
     void _drawXBMP(float _x, float _y, float _w, float _h, const uint8_t* _bitMap) override;
+    void _drawImage(int16_t _x, int16_t _y, uint16_t _w, uint16_t _h, uint16_t* _bitMap) override;
     void _drawBox(float _x, float _y, float _w, float _h) override;
     void _drawRBox(float _x, float _y, float _w, float _h, float _r) override;
     void _drawFrame(float _x, float _y, float _w, float _h) override;

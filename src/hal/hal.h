@@ -182,6 +182,19 @@ public:
     {
     }
 
+    static void drawImage(int16_t _x, int16_t _y, uint16_t _w, uint16_t _h, uint16_t* _bitMap)
+    {
+        get()->_drawImage(_x,
+                         _y,
+                         _w,
+                         _h,
+                         _bitMap);
+    }
+
+    virtual void _drawImage(int16_t _x, int16_t _y, uint16_t _w, uint16_t _h, uint16_t* _bitMap)
+    {
+    }
+
     static void drawBox(float _x, float _y, float _w, float _h) { get()->_drawBox(_x, _y, _w, _h); }
 
     virtual void _drawBox(float _x, float _y, float _w, float _h)

@@ -23,7 +23,6 @@ namespace cong
         int selected = 0;
 
     public:
-        Wifi(); //check box.
         Wifi(const std::string& _title, const std::vector<unsigned char>& _pic);
 
     public:
@@ -50,7 +49,6 @@ namespace cong
         bool enabled = false;
 
     public:
-        AP(); //check box.
         AP(const std::string& _title, const std::vector<unsigned char>& _pic);
 
     public:
@@ -84,9 +82,53 @@ namespace cong
 
     class TxtPage : public astra::Page
     {
+    private:
+        std::string filepath;
+
     public:
-        TxtPage(); //check box.
-        TxtPage(const std::string& _title, const std::vector<unsigned char>& _pic);
+        TxtPage(const fs::File& file);
+
+    public:
+        void init(const std::vector<float>& _camera) override;
+        void deInit() override;
+
+    public:
+        void onLeft() override;
+        void onRight() override;
+        void onConfirm() override;
+
+    public:
+        void render(const std::vector<float>& _camera) override;
+    };
+
+    class ImagePage : public astra::Page
+    {
+    private:
+        std::string filepath;
+
+    public:
+        ImagePage(const fs::File& file);
+
+    public:
+        void init(const std::vector<float>& _camera) override;
+        void deInit() override;
+
+    public:
+        void onLeft() override;
+        void onRight() override;
+        void onConfirm() override;
+
+    public:
+        void render(const std::vector<float>& _camera) override;
+    };
+
+    class VideoPage : public astra::Page
+    {
+    private:
+        std::string filepath;
+
+    public:
+        VideoPage(fs::File file);
 
     public:
         void init(const std::vector<float>& _camera) override;
