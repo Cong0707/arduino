@@ -66,14 +66,14 @@ namespace cong
         void render(const std::vector<float>& _camera) override;
     };
 
-    class FileList : public astra::List
+    class Directory : public astra::List
     {
     private:
         std::string path;
         bool initialized = false;
 
     public:
-        FileList(const std::string& _title, const std::string& _path);
+        Directory(const std::string& _title, const std::string& _path);
 
     public:
         void init(const std::vector<float>& _camera) override;
@@ -83,7 +83,8 @@ namespace cong
     class TxtPage : public astra::Page
     {
     private:
-        std::string filepath;
+        String filepath;
+        String indexpath;
 
     public:
         TxtPage(const fs::File& file);
@@ -99,15 +100,26 @@ namespace cong
 
     public:
         void render(const std::vector<float>& _camera) override;
+
+    private:
+        void renderTxt();
+        void getTxt(int Y);
+        void index(String indexPath);
+        void writeString(int a, String str);
+        String readString(int a);
+
+    private:
+        String txt[25];
+        int page, maxPage;
     };
 
-    class ImagePage : public astra::Page
+    class JpegViewer : public astra::Page
     {
     private:
-        std::string filepath;
+        String filepath;
 
     public:
-        ImagePage(const fs::File& file);
+        JpegViewer(const fs::File& file);
 
     public:
         void init(const std::vector<float>& _camera) override;
@@ -125,7 +137,7 @@ namespace cong
     class VideoPage : public astra::Page
     {
     private:
-        std::string filepath;
+        String filepath;
 
     public:
         VideoPage(fs::File file);

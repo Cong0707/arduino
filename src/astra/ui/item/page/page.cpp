@@ -1,10 +1,10 @@
 #include "page.h"
 
-#include <SD.h>
 #include <SD_MMC.h>
 #include <vector>
 #include <WiFi.h>
 #include <cstring>
+#include <EEPROM.h>
 #include <TJpg_Decoder.h>
 
 namespace cong
@@ -142,7 +142,7 @@ namespace cong
         HAL::canvasUpdate();
     }
 
-    FileList::FileList(const std::string& _title, const std::string& _path)
+    Directory::Directory(const std::string& _title, const std::string& _path)
     {
         title = _title;
         pic = {
@@ -158,7 +158,7 @@ namespace cong
         path = _path;
     }
 
-    void FileList::init(const std::vector<float>& _camera)
+    void Directory::init(const std::vector<float>& _camera)
     {
         pinMode(GPIO_NUM_38, PULLDOWN);
         SD_MMC.setPins(GPIO_NUM_40, GPIO_NUM_39, GPIO_NUM_41);
@@ -172,10 +172,10 @@ namespace cong
             File file = root.openNextFile("r");
             while (file) {
                 if (file.isDirectory()) {
-                    addItem(new FileList(file.name(), file.path()));
+                    addItem(new Directory(file.name(), file.path()));
                 } else {
                     if (String(file.name()).endsWith(".txt")) addItem(new TxtPage(file));
-                    else if (String(file.name()).endsWith(".jpg")) addItem(new ImagePage(file));
+                    else if (String(file.name()).endsWith(".jpg")) addItem(new JpegViewer(file));
                     else if (String(file.name()).endsWith(".mp4")) addItem(new VideoPage(file));
                     else addItem(new List(file.name()));
                 }
@@ -189,7 +189,7 @@ namespace cong
         childPosInit(_camera);
     }
 
-    void FileList::deInit() {}
+    void Directory::deInit() {}
 
     TxtPage::TxtPage(const File& file)
     {
@@ -199,8 +199,187 @@ namespace cong
 
     void TxtPage::init(const std::vector<float>& _camera)
     {
-        File file = SD_MMC.open(filepath.c_str());
+        HAL::canvasClear();
+        EEPROM.begin(1024);
+        page = readString(1).toInt();
+        maxPage = readString(10).toInt();
 
+        SD_MMC.open(filepath, "r");
+
+        String indexPath = filepath;
+        indexPath.replace(".txt", ".txt.index");
+        File fileSY = SD_MMC.open(indexPath, "r");
+        if (!fileSY) index(indexPath);
+
+        this->indexpath = indexPath;
+
+        getTxt(page);
+        renderTxt();
+    }
+
+    void TxtPage::getTxt(int Y)
+    {
+        int i = 0, l = 0, d = 0;
+        int address = 0;
+
+        if (Y != 0)
+        {
+            File SYfile = SD_MMC.open(indexpath, "r");
+            String ST_L;
+            while (SYfile.available())
+            {
+                byte ST_T = SYfile.read();
+                ST_L += (char)ST_T;
+                if (ST_T == '\n')
+                {
+                    if (ST_L.substring(ST_L.indexOf("L") + 1, ST_L.indexOf(":")).toInt() == Y)
+                    {
+                        address = ST_L.substring(ST_L.indexOf(":") + 1, ST_L.indexOf("\n")).toInt();
+                        break;
+                    }
+                    else
+                    {
+                        ST_L = "";
+                    }
+                }
+            }
+        }
+        File file = SD_MMC.open(filepath, "r");
+        file.seek(address, SeekSet);
+        txt[0] = "";
+        while (file.available())
+        {
+            byte t = file.read();
+            if ((t <= 0xF7) && (t >= 0xB0))
+            {
+                txt[l] += (char)t;
+                txt[l] += (char)file.read();
+                txt[l] += (char)file.read();
+                i += 3;
+                d += 3;
+            }
+            else if (t == 0xE3)
+            {
+                txt[l] += (char)t;
+                txt[l] += (char)file.read();
+                txt[l] += (char)file.read();
+                i += 3;
+                d += 3;
+            }
+            else if (t == '\n')
+            {
+                i++;
+                l++;
+                d = 0;
+                txt[l] = "";
+            }
+            else
+            {
+                txt[l] += (char)t;
+                i++;
+                d++;
+            }
+
+            if (d > 60)
+            {
+                d = 0;
+                l++;
+                txt[l] = "";
+            }
+            if (l >= 24)
+            {
+                break;
+            }
+        }
+    }
+
+    void TxtPage::index(String indexPath)
+    {
+        unsigned long i = 0, l = 0, d = 0, y = 0;
+        int s = SD_MMC.open(filepath, "r").size();
+        String adds;
+        int v;
+
+        File SYfile = SD_MMC.open(indexPath, "a");
+        File file = SD_MMC.open(filepath, "r");
+        while (file.available())
+        {
+            byte t = file.read();
+            if ((t <= 0xF7) && (t >= 0xB0))
+            {
+                t = file.read();
+                t = file.read();
+                i += 3;
+                d += 3;
+            }
+            else if (t == 0xE3)
+            {
+                txt[l] += (char)t;
+                txt[l] += (char)file.read();
+                txt[l] += (char)file.read();
+                i += 3;
+                d += 3;
+            }
+            else if (t == '\n')
+            {
+                i++;
+                l++;
+                d = 0;
+            }
+            else
+            {
+                txt[l] += (char)t;
+                i++;
+                d++;
+            }
+            if (d > 20)
+            {
+                d = 0;
+                l++;
+            }
+            if (l >= 20)
+            {
+                long t = file.position();
+                float value = (float(t) / float(s)) * 100;
+                if (v != int(value))
+                {
+                    v = int(value);
+                    String info = "处理进度：" + String(value) + "%";
+                    Serial.println(info);
+                    HAL::printInfo(info.c_str());
+                }
+
+                y++;
+                adds = "L" + String(y) + ":" + String(file.position()) + "\n";
+                SYfile.print(adds);
+                l = 0;
+            }
+        }
+        maxPage = y;
+        writeString(10, String(maxPage));
+    }
+
+    void TxtPage::writeString(int a, String str)
+    {
+        for (int i = 0; i < str.length(); i++)
+        {
+            EEPROM.write(a + i, str[i]);
+        }
+        EEPROM.write(a + str.length(), 0);
+        EEPROM.commit();
+    }
+
+    String TxtPage::readString(int a)
+    {
+        String str;
+        char ch = EEPROM.read(a);
+        while (ch != 0)
+        {
+            str += ch;
+            a += 1;
+            ch = EEPROM.read(a);
+        }
+        return str;
     }
 
     void TxtPage::onConfirm()
@@ -210,32 +389,46 @@ namespace cong
 
     void TxtPage::onLeft()
     {
-
+        HAL::canvasClear();
+        if (page > 0) page--;
+        getTxt(page);
+        writeString(1, String(page));
+        renderTxt();
     }
 
     void TxtPage::onRight()
     {
-
+        HAL::canvasClear();
+        page++;
+        getTxt(page);
+        writeString(1, String(page));
+        renderTxt();
     }
 
-    void TxtPage::render(const std::vector<float>& _camera)
+    void TxtPage::renderTxt()
     {
+        HAL::setDrawType(1);
 
+        std::string pageInfo = ("页：" + String(page + 1) + "/" + String(maxPage)).c_str();
+        HAL::drawChinese(300 - (pageInfo.length() * HAL::getFontWidth(pageInfo)), 14, pageInfo);
+
+        for (int j = 0; j < 24; j++)
+        {
+            HAL::drawChinese(0, 16 * (j + 2), txt[j].c_str());
+        }
     }
 
-    void TxtPage::deInit()
-    {
-
-    }
+    void TxtPage::deInit(){}
+    void TxtPage::render(const std::vector<float>& _camera){}
 
 
-    ImagePage::ImagePage(const File& file)
+    JpegViewer::JpegViewer(const File& file)
     {
         title = file.name();
         filepath = file.path();
     }
 
-    void ImagePage::init(const std::vector<float>& _camera)
+    void JpegViewer::init(const std::vector<float>& _camera)
     {
         HAL::canvasClear();
 
@@ -268,11 +461,11 @@ namespace cong
         TJpgDec.drawSdJpg(blackW, blackH, SD_MMC.open(filepath.c_str()));
     }
 
-    void ImagePage::render(const std::vector<float>& _camera){}
-    void ImagePage::deInit(){}
-    void ImagePage::onLeft(){}
-    void ImagePage::onRight(){}
-    void ImagePage::onConfirm(){}
+    void JpegViewer::render(const std::vector<float>& _camera){}
+    void JpegViewer::deInit(){}
+    void JpegViewer::onLeft(){}
+    void JpegViewer::onRight(){}
+    void JpegViewer::onConfirm(){}
 
 
     VideoPage::VideoPage(File file)
