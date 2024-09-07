@@ -20,7 +20,7 @@ void TFTHAL::init() {
     button.setDoubleClickHandler([](Button2&)
     {
         delay(150);
-        esp_deep_sleep_start();
+        esp_light_sleep_start();
     });//双击沉睡）
 
     rotary.begin(GPIO_NUM_18, GPIO_NUM_16, 4);

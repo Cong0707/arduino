@@ -74,9 +74,9 @@ void astraCoreInit()
 
     astra::Menu* rootPage = new astra::Tile("主菜单");
 
-    rootPage->addItem(new cong::FileList("文件", "/"));
+    rootPage->addItem(new cong::Directory("文件", "/"));
     rootPage->addItem(new astra::List("测试2", moon));
-    rootPage->addItem(new astra::List("测试测试3", sci));
+    rootPage->addItem(new cong::BatteryPage("电池", sci));
 
     astra::Menu* secondPage = new astra::List("设置", settings);
     rootPage->addItem(secondPage);
@@ -90,7 +90,7 @@ void astraCoreInit()
         [](void*) {
             for (;;) {
                 HAL::startKeyScan();  // 执行按键扫描
-                vTaskDelay(10 / portTICK_PERIOD_MS);  // 延迟10毫秒，避免占用过多CPU资源
+                vTaskDelay(1 / portTICK_PERIOD_MS);  // 延迟1毫秒，避免占用过多CPU资源
             }
         },
         "KeyScanTask",  // 任务名称

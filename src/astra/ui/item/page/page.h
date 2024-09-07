@@ -2,6 +2,7 @@
 #ifndef ASTRA_PAGE__H
 #define ASTRA_PAGE__H
 
+#include <sqlite3.h>
 #include <vector>
 #include <astra/ui/item/menu/menu.h>
 
@@ -85,6 +86,7 @@ namespace cong
     private:
         String filepath;
         String indexpath;
+        sqlite3 *db;
 
     public:
         TxtPage(const fs::File& file);
@@ -104,13 +106,22 @@ namespace cong
     private:
         void renderTxt();
         void getTxt(int Y);
-        void index(String indexPath);
-        void writeString(int a, String str);
-        String readString(int a);
+        void index();
+        void writePage();
+
+        void insertString(String key, String value);
+        String queryString(String key);
 
     private:
         String txt[25];
-        int page, maxPage;
+        int page = 1;
+        int maxPage = 1;
+        String md5value = "";
+
+        int step = 1;
+
+        int rc;
+        char *errMsg;
     };
 
     class JpegViewer : public astra::Page
@@ -150,6 +161,18 @@ namespace cong
         void onLeft() override;
         void onRight() override;
         void onConfirm() override;
+
+    public:
+        void render(const std::vector<float>& _camera) override;
+    };
+
+    class BatteryPage : public astra::Page
+    {
+    public:
+        BatteryPage(const std::string& _title, const std::vector<unsigned char>& _pic);
+
+    public:
+        void init(const std::vector<float>& _camera) override;
 
     public:
         void render(const std::vector<float>& _camera) override;

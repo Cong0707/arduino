@@ -147,8 +147,6 @@ namespace astra
 
     void Launcher::update()
     {
-        HAL::canvasClear();
-
         currentMenu->render(camera->getPosition());
         if (currentMenu->getType() == "Widget") currentMenu->render(camera->getPosition());
         selector->render(camera->getPosition());

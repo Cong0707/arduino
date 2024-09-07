@@ -171,6 +171,8 @@ namespace astra
 
     void List::render(const std::vector<float>& _camera)
     {
+        HAL::canvasClear();
+
         Item::updateConfig();
 
         HAL::setDrawType(1);
@@ -344,6 +346,8 @@ namespace astra
 
     void Tile::render(const std::vector<float>& _camera)
     {
+        HAL::canvasClear();
+
         Item::updateConfig();
 
         HAL::setDrawType(1);
